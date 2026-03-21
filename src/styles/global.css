@@ -63,6 +63,13 @@
     --sidebar-ring: hsl(217.2, 91.2%, 59.8%);
 }
 
+/* additions */
+@theme {
+    /*48 - 56*/
+    --spacing-page: 54.6rem;
+}
+
+/* replaces */
 @theme inline {
     --color-background: var(--background);
     --color-foreground: var(--foreground);
@@ -103,9 +110,11 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
-    /*html {
+    html,
+    button,
+    a {
         cursor: none;
-    }*/
+    }
     body {
         @apply bg-background text-foreground font-sans;
     }
@@ -117,10 +126,6 @@
     h6 {
         @apply font-bold tracking-tight;
     }
-    /*a,
-    button {
-        cursor: none;
-    }*/
 }
 
 @layer utilities {
