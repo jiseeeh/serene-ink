@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   requestAnimationFrame(loop);
 
-  window.addEventListener("mouseleave", () => {
+  window.addEventListener("mouseout", () => {
     if (cursor) cursor.style.opacity = "0";
   });
 });
