@@ -1,9 +1,9 @@
 ---
-type Props = {
+interface Props {
     content: string;
-};
+}
 
-const { content } = Astro.props as Props;
+const { content } = Astro.props;
 ---
 
 <span class="text-sm text-muted-foreground rounded-full bg-muted px-3 py-1">
