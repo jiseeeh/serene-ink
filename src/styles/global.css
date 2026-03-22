@@ -129,6 +129,16 @@
 }
 
 @layer utilities {
+    a.active {
+        font-weight: 600;
+    }
+    a.active::after {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 2px;
+        background-color: var(--accent);
+    }
     .prose-blog {
         @apply text-foreground leading-relaxed;
         font-size: 18px;

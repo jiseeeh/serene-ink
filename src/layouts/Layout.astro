@@ -1,6 +1,10 @@
 ---
 import "../styles/global.css";
 import { Moon, Braces, Search } from "@lucide/astro";
+
+const isOnCurrentPath = (path: string) => {
+    return Astro.url.pathname === path;
+};
 ---
 
 <html lang="en">
@@ -18,10 +22,16 @@ import { Moon, Braces, Search } from "@lucide/astro";
 
             <ul class="flex items-center gap-4">
                 <li>
-                    <a>Writing</a>
+                    <a href="/" class={isOnCurrentPath("/") ? "active" : ""}
+                        >Writing</a
+                    >
                 </li>
                 <li>
-                    <a>About</a>
+                    <a
+                        href="/about"
+                        class={isOnCurrentPath("/about") ? "active" : ""}
+                        >About</a
+                    >
                 </li>
                 <li>
                     <button>
