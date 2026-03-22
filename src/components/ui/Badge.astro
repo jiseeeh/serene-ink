@@ -1,0 +1,11 @@
+---
+type Props = {
+    content: string;
+};
+
+const { content } = Astro.props as Props;
+---
+
+<span class="text-sm text-muted-foreground rounded-full bg-muted px-3 py-1">
+    {content}
+</span>
