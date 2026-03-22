@@ -20,12 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!(e.target instanceof Element)) return;
 
     if (e.target.closest("a, button")) scale = 1.8;
-  });
-
-  document.addEventListener("mouseout", (e) => {
-    if (!(e.target instanceof Element)) return;
-
-    if (e.target.closest("a, button")) scale = 1;
+    else scale = 1;
   });
 
   function loop() {
