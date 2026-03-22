@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!isDesktop) return;
 
   const cursor = document.getElementById("cursor");
+  const HALF_OF_CURSOR = 6;
+  const LERP_FACTOR = 0.15; // higher value = slower movement
 
   let targetX = 0,
     targetY = 0;
@@ -11,8 +13,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let scale = 1;
 
   window.addEventListener("mousemove", (e) => {
-    targetX = e.clientX - 6;
-    targetY = e.clientY - 6;
+    // to center the cursor on the mouse position
+    targetX = e.clientX - HALF_OF_CURSOR;
+    targetY = e.clientY - HALF_OF_CURSOR;
     if (cursor) cursor.style.opacity = "1";
   });
 
@@ -24,8 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function loop() {
-    currentX += (targetX - currentX) * 0.15;
-    currentY += (targetY - currentY) * 0.15;
+    currentX += (targetX - currentX) * LERP_FACTOR;
+    currentY += (targetY - currentY) * LERP_FACTOR;
 
     if (cursor) {
       cursor.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) scale(${scale})`;
