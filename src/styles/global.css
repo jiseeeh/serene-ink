@@ -104,17 +104,21 @@
     --radius-xl: calc(var(--radius) * 1.4);
 }
 
+@media (pointer: fine) {
+    html.has-custom-cursor,
+    html.has-custom-cursor button,
+    html.has-custom-cursor a {
+        cursor: none;
+    }
+}
+
 @layer base {
     * {
         @apply border-border;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
-    html,
-    button,
-    a {
-        cursor: none;
-    }
+
     body {
         @apply bg-background text-foreground font-sans;
     }

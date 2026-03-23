@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const isDesktop = matchMedia("(pointer: fine)").matches;
   if (!isDesktop) return;
 
+  document.documentElement.classList.add("has-custom-cursor");
+
   const cursor = document.getElementById("cursor");
   const HALF_OF_CURSOR = 6;
   const LERP_FACTOR = 0.15; // higher value = slower movement
