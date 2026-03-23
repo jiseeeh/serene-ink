@@ -118,12 +118,9 @@ const groupedByMonthAndYear = posts.reduce(
                     {Object.entries(groupedByMonthAndYear[year]).map(
                         ([month, posts]) => (
                             <section>
-                                <time
-                                    class="text-sm text-muted-foreground uppercase font-medium tracking-widest"
-                                    datetime={`${year}-${month}`}
-                                >
+                                <h3 class="text-sm text-muted-foreground uppercase font-medium tracking-widest">
                                     {month} {getFirstAndLastPostDate(posts)}
-                                </time>
+                                </h3>
                                 <hr class="mt-2" />
                                 <section class="flex flex-col gap-3 my-5">
                                     {posts.map((post) => {
