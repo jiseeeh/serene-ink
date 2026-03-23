@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const cursor = document.getElementById("cursor");
   const HALF_OF_CURSOR = 6;
-  const LERP_FACTOR = 0.15; // higher value = slower movement
+  const LERP_FACTOR = 0.15; // higher value = faster/snappier movement, lower value = slower/smoother
 
   let targetX = 0,
     targetY = 0;
