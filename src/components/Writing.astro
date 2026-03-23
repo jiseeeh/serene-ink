@@ -1,3 +1,160 @@
-<main>
-    <h1>TODO</h1>
+---
+import Badge from "./ui/Badge.astro";
+
+type Post = {
+    id: number;
+    title: string;
+    date: string;
+    frontmatter: string;
+    slug: string;
+    imagePath: string;
+    readTime: number;
+    tags: string[];
+};
+const posts: Post[] = [
+    {
+        id: 0,
+        title: "On Letting Go of Clever Code",
+        date: "3/21/2026",
+        frontmatter:
+            "Why the best code you'll ever write is the code that a stranger can read at 2am without coffee.",
+        slug: "on-letting-go-of-clever-code",
+        imagePath: "",
+        readTime: 8,
+        tags: ["engineering", "craft"],
+    },
+    {
+        id: 1,
+        title: "The Database Is the Product",
+        date: "3/22/2026",
+        frontmatter:
+            "A reflection on why schema design deserves the same care as interface design.",
+        slug: "the-database-is-the-product",
+        imagePath: "",
+        readTime: 9,
+        tags: ["database", "engineering"],
+    },
+    {
+        id: 2,
+        title: "What Unix Got Right",
+        date: "4/1/2026",
+        frontmatter:
+            "Small programs, text streams, and the radical idea that software should compose.",
+        slug: "what-unix-got-right",
+        imagePath: "",
+        readTime: 10,
+        tags: ["unix", "engineering"],
+    },
+];
+
+const monthIndexToName: Record<number, string> = {
+    1: "Jan",
+    2: "Feb",
+    3: "Mar",
+    4: "Apr",
+    5: "May",
+    6: "Jun",
+    7: "Jul",
+    8: "Aug",
+    9: "Sep",
+    10: "Oct",
+    11: "Nov",
+    12: "Dec",
+};
+
+const getFirstAndLastPostDate = (posts: Post[]): string | null => {
+    if (posts.length === 0) return null;
+
+    if (posts.length === 1) return `${posts[0].date.split("/")[1]}`;
+    const sorted = [...posts].sort((a, b) => {
+        return (
+            Number.parseInt(a.date.split("/")[1]) -
+            Number.parseInt(b.date.split("/")[1])
+        );
+    });
+
+    const first = sorted[0];
+    const last = sorted[sorted.length - 1];
+
+    return `${first.date.split("/")[1]} - ${last.date.split("/")[1]}`;
+};
+const groupedByMonthAndYear = posts.reduce(
+    (acc, curr) => {
+        const parts = curr.date.split("/");
+        const year = parts[2];
+        const month = monthIndexToName[Number(parts[0])];
+
+        if (!acc[year]) {
+            acc[year] = {};
+        }
+
+        if (!acc[year][month]) {
+            acc[year][month] = [];
+        }
+
+        acc[year][month].push(curr);
+        return acc;
+    },
+    {} as Record<string, Record<string, Post[]>>,
+);
+---
+
+<main class="mt-20 px-10 lg:px-20">
+    <span class="uppercase text-primary font-medium tracking-widest"
+        >notebook</span
+    >
+
+    <h1 class="text-4xl mt-10">Writing</h1>
+    <p class="text-lg max-w-122 text-muted-foreground">
+        Thoughts on systems, craft, and the quiet details of building things
+        well.
+    </p>
+
+    <section class="mt-20 my-5">
+        {
+            Object.keys(groupedByMonthAndYear).map((year) => (
+                <section>
+                    <h2 class="text-2xl">{year}</h2>
+                    {Object.entries(groupedByMonthAndYear[year]).map(
+                        ([month, posts]) => (
+                            <section>
+                                <h3 class="text-sm text-muted-foreground uppercase font-medium tracking-widest">
+                                    {month} {getFirstAndLastPostDate(posts)}
+                                </h3>
+                                <hr class="mt-2" />
+                                <section class="flex flex-col gap-3 my-5">
+                                    {posts.map((post) => {
+                                        return (
+                                            <section class="flex flex-col gap-2 group hover:bg-muted px-3 py-8 rounded-md transition-all duration-300">
+                                                <div class="flex gap-2  items-center">
+                                                    <h2 class="text-2xl group-hover:text-primary">
+                                                        {post.title}
+                                                    </h2>
+                                                    <span class="text-muted-foreground text-xs">
+                                                        {post.readTime} min read
+                                                    </span>
+                                                </div>
+                                                <p class="text-muted-foreground">
+                                                    {post.frontmatter}
+                                                </p>
+                                                <section class="flex gap-2 flex-wrap">
+                                                    {post.tags.map((tag) => {
+                                                        return (
+                                                            <Badge
+                                                                content={tag}
+                                                            />
+                                                        );
+                                                    })}
+                                                </section>
+                                            </section>
+                                        );
+                                    })}
+                                </section>
+                            </section>
+                        ),
+                    )}
+                </section>
+            ))
+        }
+    </section>
 </main>

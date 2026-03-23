@@ -1,5 +1,10 @@
 ---
 import "../styles/global.css";
+import { Moon, Braces, Search } from "@lucide/astro";
+
+const isOnCurrentPath = (path: string) => {
+    return Astro.url.pathname === path;
+};
 ---
 
 <html lang="en">
@@ -11,7 +16,41 @@ import "../styles/global.css";
         <meta name="generator" content={Astro.generator} />
         <title>Serene Ink</title>
     </head>
-    <body class="container mx-auto">
+    <body class="max-w-page mx-auto">
+        <nav class="px-5 lg:px-0 py-5 flex justify-between">
+            <Braces />
+
+            <ul class="flex items-center gap-4">
+                <li>
+                    <a href="/" class={isOnCurrentPath("/") ? "active" : ""}
+                        >Writing</a
+                    >
+                </li>
+                <li>
+                    <a
+                        href="/about"
+                        class={isOnCurrentPath("/about") ? "active" : ""}
+                        >About</a
+                    >
+                </li>
+                <li>
+                    <button type="button" aria-label="Toggle dark mode">
+                        <Moon class="" size={16} />
+                    </button>
+                </li>
+                <li>
+                    <button type="button" aria-label="Open search">
+                        <Search size={16} />
+                    </button>
+                </li>
+            </ul>
+        </nav>
         <slot />
+        <div
+            id="cursor"
+            class="bg-primary mix-blend-hard-light opacity-0 size-3 rounded-full pointer-events-none z-9999 fixed top-0 left-0"
+        >
+        </div>
+        <script is:inline src="/scripts/cursor.js"></script>
     </body>
 </html>
