@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { Moon, Braces, Search } from "@lucide/astro";
+import { ClientRouter } from "astro:transitions";
 
 const isOnCurrentPath = (path: string) => {
     return Astro.url.pathname === path;
@@ -11,6 +12,7 @@ const isOnCurrentPath = (path: string) => {
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
+        <ClientRouter />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" href="/favicon.ico" />
         <meta name="generator" content={Astro.generator} />
@@ -23,14 +25,19 @@ const isOnCurrentPath = (path: string) => {
             <ul class="flex items-center gap-4">
                 <li>
                     <a href="/" class={isOnCurrentPath("/") ? "active" : ""}
-                        >Writing</a
+                        ><span class={isOnCurrentPath("/") ? "" : "nav-link"}
+                            >Writing</span
+                        ></a
                     >
                 </li>
                 <li>
                     <a
                         href="/about"
                         class={isOnCurrentPath("/about") ? "active" : ""}
-                        >About</a
+                        ><span
+                            class={isOnCurrentPath("/about") ? "" : "nav-link"}
+                            >About</span
+                        ></a
                     >
                 </li>
                 <li>
@@ -49,6 +56,7 @@ const isOnCurrentPath = (path: string) => {
         <div
             id="cursor"
             class="bg-primary mix-blend-hard-light opacity-0 size-3 rounded-full pointer-events-none z-9999 fixed top-0 left-0"
+            transition:persist
         >
         </div>
         <script is:inline src="/scripts/cursor.js"></script>
