@@ -1,5 +1,71 @@
 ---
-
+import DecorativeKanji from "./about/DecorativeKanji.astro";
 ---
 
-<main class="page">ABOUT</main>
+<main class="page flex flex-col space-y-10">
+    <section class="relative flex flex-col items-start gap-4">
+        <span class="text-accent uppercase text-xs">// about the author</span>
+        <h1 class="text-5xl">Craft & Code</h1>
+        <p>Where engineering meets artistry — one deliberate line at a time.</p>
+
+        <span
+            class="text-secondary -z-1 opacity-70 text-[10rem] absolute -top-16 -left-4 disable-select"
+            aria-hidden="true">匠</span
+        >
+    </section>
+
+    <section class="flex gap-0 -space-x-px">
+        <DecorativeKanji title="2+" subTitle="Years of exp" kanji="歴" />
+        <DecorativeKanji title="3" subTitle="Projects Shipped" kanji="造" />
+        <DecorativeKanji title="∞" subTitle="Coffees / day" kanji="杯" />
+        <DecorativeKanji title="~2" subTitle="Posts / year" kanji="筆" />
+    </section>
+
+    <div class="w-full h-1 bg-foreground"></div>
+
+    <section>
+        <section class="flex justify-between">
+            <div class="size-5 border border-b-0 border-r-0 border-foreground">
+            </div>
+            <div
+                class="size-5 border border-b-0 border-r-0 border-foreground rotate-90"
+            >
+            </div>
+        </section>
+        <section class="px-5 space-y-5">
+            <p>
+                I'm a software engineer who believes that the best technical
+                work is indistinguishable from craft. I've spent the last decade
+                building systems — databases, distributed services, developer
+                tools — and thinking carefully about why some software endures
+                while most doesn't.
+            </p>
+            <p>
+                This blog is where I write about the intersection of engineering
+                and taste: how to design schemas that age well, why readability
+                compounds, and what we can learn from disciplines outside our
+                own.
+            </p>
+            <p>
+                I write slowly and deliberately. New posts appear roughly once a
+                month. If that pace appeals to you, you're in the right place.
+            </p>
+        </section>
+
+        <section class="flex justify-between">
+            <div
+                class="size-5 border border-b-0 border-r-0 border-foreground -rotate-90"
+            >
+            </div>
+            <div
+                class="size-5 border border-b-0 border-r-0 border-foreground rotate-180"
+            >
+            </div>
+        </section>
+    </section>
+
+    <div class="flex items-center gap-6">
+        <span class="text-accent text-sm uppercase">// Currently</span>
+        <div class="h-px flex-1 bg-accent"></div>
+    </div>
+</main>
