@@ -1,7 +1,10 @@
 ---
+import { ExternalLink } from "@lucide/astro";
+
 import Separator from "./ui/Separator.astro";
 import ActivityCard from "./about/ActivityCard.astro";
 import DecorativeKanji from "./about/DecorativeKanji.astro";
+import Badge from "./ui/Badge.astro";
 ---
 
 <main class="page flex flex-col space-y-10">
@@ -68,7 +71,7 @@ import DecorativeKanji from "./about/DecorativeKanji.astro";
 
     <Separator title="Currently" />
 
-    <section class="mb-20 grid grid-cols-2 gap-2 w-fit mx-auto">
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-2 w-fit mx-auto">
         <ActivityCard
             imageSrc="/images/mhr.webp"
             imageAlt="Monster Hunter Rise Image"
@@ -100,4 +103,37 @@ import DecorativeKanji from "./about/DecorativeKanji.astro";
             subtitle="by NEFFEX"
         />
     </section>
+
+    <Separator title="Projects" />
+
+    <section class="flex flex-col gap-4">
+        <section class="w-full bg-secondary/30 border space-y-4 p-5">
+            <section class="flex">
+                <div>
+                    <span class="font-bold">Project Title</span>
+                    <p class="text-muted-foreground">
+                        A brief description of the project goes here. It should
+                        be concise and informative, giving readers a clear idea
+                        of what the project is about and its key features or
+                        goals.
+                    </p>
+                </div>
+                <a
+                    href="https://google.com"
+                    target="_blank"
+                    class="text-muted-foreground"
+                    rel="noreferrer"
+                >
+                    <ExternalLink size={20} />
+                </a>
+            </section>
+            <section class="flex flex-wrap gap-2">
+                <Badge content="Next.js" />
+                <Badge content="Drizzle" />
+                <Badge content="PostgreSQL" />
+            </section>
+        </section>
+    </section>
+
+    <Separator title="Interests" />
 </main>
