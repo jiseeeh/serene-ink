@@ -1,4 +1,6 @@
 ---
+import Separator from "./ui/Separator.astro";
+import ActivityCard from "./about/ActivityCard.astro";
 import DecorativeKanji from "./about/DecorativeKanji.astro";
 ---
 
@@ -64,8 +66,38 @@ import DecorativeKanji from "./about/DecorativeKanji.astro";
         </section>
     </section>
 
-    <div class="flex items-center gap-6">
-        <span class="text-accent text-sm uppercase">// Currently</span>
-        <div class="h-px flex-1 bg-accent"></div>
-    </div>
+    <Separator title="Currently" />
+
+    <section class="mb-20 grid grid-cols-2 gap-2 w-fit mx-auto">
+        <ActivityCard
+            imageSrc="/images/mhr.webp"
+            imageAlt="Monster Hunter Rise Image"
+            label="Playing"
+            title="Monster Hunter Rise"
+            subtitle="Open-world action RPG"
+        />
+        <!-- https://wall.alphacoders.com/big.php?i=1367731  -->
+        <ActivityCard
+            imageSrc="/images/frieren.webp"
+            imageAlt="Illustration of a chibi Frieren looking up"
+            label="watching"
+            title="Frieren: Beyond Journey's End"
+            subtitle="Fantasy / Adventure"
+        />
+        <ActivityCard
+            imageSrc="/images/pom.webp"
+            imageAlt="Illustration of a brain shaped paper bills"
+            label="reading"
+            title="Pyschology of Money"
+            subtitle="by Morgan Housel"
+        />
+        <!-- https://i.ytimg.com/vi/83RUhxsfLWs/maxresdefault.jpg -->
+        <ActivityCard
+            imageSrc="/images/neffex.webp"
+            imageAlt="Logo of NEFFEX"
+            label="listening"
+            title="Grateful"
+            subtitle="by NEFFEX"
+        />
+    </section>
 </main>
