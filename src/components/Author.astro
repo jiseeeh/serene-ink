@@ -1,10 +1,65 @@
 ---
-import { ExternalLink } from "@lucide/astro";
+import {
+    ExternalLink,
+    Terminal,
+    GitMerge,
+    Rocket,
+    Cog,
+    PenTool,
+    Book,
+    Sparkles,
+} from "@lucide/astro";
 
 import Separator from "./ui/Separator.astro";
 import ActivityCard from "./about/ActivityCard.astro";
 import DecorativeKanji from "./about/DecorativeKanji.astro";
 import Badge from "./ui/Badge.astro";
+import Timeline from "./about/Timeline.astro";
+
+const timeline = [
+    {
+        year: "2019",
+        title: "Wrote first line of code",
+        description: "Hello, World in Java",
+        icon: Terminal,
+    },
+    {
+        year: "2021",
+        title: "Joined Github",
+        description: "Pushed my console based java projects",
+        icon: GitMerge,
+    },
+    {
+        year: "Early 2022",
+        title: "Opened my first issue on Github",
+        description: "A bug issue on daisyUI",
+        icon: Rocket,
+    },
+    {
+        year: "Late 2022",
+        title: "Built a ton of pet projects",
+        description: "It was hard at first!",
+        icon: Cog,
+    },
+    {
+        year: "2023",
+        title: "Made a blog post",
+        description: "Just for documenting my progress",
+        icon: Book,
+    },
+    {
+        year: "2024 - 2025",
+        title: "Started my capstone",
+        description: "App development with Flutter",
+        icon: PenTool,
+    },
+    {
+        year: "Now",
+        title: "Building what's next",
+        description: "Always learning, always shipping",
+        icon: Sparkles,
+    },
+];
 ---
 
 <main class="page flex flex-col space-y-10">
@@ -135,5 +190,16 @@ import Badge from "./ui/Badge.astro";
         </section>
     </section>
 
-    <Separator title="Interests" />
+    <Separator title="Journey" />
+
+    <Timeline items={timeline} />
+
+    <div
+        class="flex items-center justify-center gap-4 text-muted-foreground text-sm pt-10 pb-4"
+    >
+        <div class="h-px w-full bg-foreground/10"></div>
+        <span class="whitespace-nowrap uppercase tracking-widest">終 - fin</span
+        >
+        <div class="h-px w-full bg-foreground/10"></div>
+    </div>
 </main>
