@@ -16,6 +16,11 @@ import DecorativeKanji from "./about/DecorativeKanji.astro";
 import Badge from "./ui/Badge.astro";
 import Timeline from "./about/Timeline.astro";
 
+import mhrImage from "../assets/images/mhr.webp";
+import frierenImage from "../assets/images/frieren.webp";
+import pomImage from "../assets/images/pom.webp";
+import neffexImage from "../assets/images/neffex.webp";
+
 const timeline = [
     {
         year: "2019",
@@ -128,7 +133,7 @@ const timeline = [
 
     <section class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
         <ActivityCard
-            imageSrc="/images/mhr.webp"
+            imageSrc={mhrImage}
             imageAlt="Monster Hunter Rise Image"
             label="Playing"
             title="Monster Hunter Rise"
@@ -136,14 +141,14 @@ const timeline = [
         />
         <!-- https://wall.alphacoders.com/big.php?i=1367731  -->
         <ActivityCard
-            imageSrc="/images/frieren.webp"
+            imageSrc={frierenImage}
             imageAlt="Illustration of a chibi Frieren looking up"
             label="watching"
             title="Frieren: Beyond Journey's End"
             subtitle="Fantasy / Adventure"
         />
         <ActivityCard
-            imageSrc="/images/pom.webp"
+            imageSrc={pomImage}
             imageAlt="Illustration of a brain shaped paper bills"
             label="reading"
             title="Pyschology of Money"
@@ -151,7 +156,7 @@ const timeline = [
         />
         <!-- https://i.ytimg.com/vi/83RUhxsfLWs/maxresdefault.jpg -->
         <ActivityCard
-            imageSrc="/images/neffex.webp"
+            imageSrc={neffexImage}
             imageAlt="Logo of NEFFEX"
             label="listening"
             title="Grateful"
