@@ -1,6 +1,6 @@
 ---
 import "../styles/global.css";
-import { Moon, Braces, Search } from "@lucide/astro";
+import { Moon, Braces, Search, Rss } from "@lucide/astro";
 import { ClientRouter } from "astro:transitions";
 
 const isOnCurrentPath = (path: string) => {
@@ -44,6 +44,13 @@ const isOnCurrentPath = (path: string) => {
                     <button type="button" aria-label="Toggle dark mode">
                         <Moon class="" size={16} />
                     </button>
+                </li>
+                <li>
+                    <a href="/feed.xml">
+                        <span>
+                            <Rss size={16} />
+                        </span>
+                    </a>
                 </li>
                 <li>
                     <button type="button" aria-label="Open search">
