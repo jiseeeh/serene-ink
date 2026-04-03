@@ -17,6 +17,12 @@ const isOnCurrentPath = (path: string) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="generator" content={Astro.generator} />
         <title>Serene Ink</title>
+        <link
+            rel="alternate"
+            type="application/rss+xml"
+            title="Serene Ink"
+            href={new URL("feed.xml", Astro.url.origin)}
+        />
     </head>
     <body class="max-w-page mx-auto">
         <nav class="px-5 lg:px-0 py-5 flex justify-between">
