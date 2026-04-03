@@ -1,6 +1,5 @@
 ---
 import {
-    ExternalLink,
     Terminal,
     GitMerge,
     Rocket,
@@ -13,7 +12,7 @@ import {
 import Separator from "./ui/Separator.astro";
 import ActivityCard from "./about/ActivityCard.astro";
 import DecorativeKanji from "./about/DecorativeKanji.astro";
-import Badge from "./ui/Badge.astro";
+import ProjectCard from "./ProjectCard.astro";
 import Timeline from "./about/Timeline.astro";
 
 import mhrImage from "../assets/images/mhr.webp";
@@ -65,6 +64,23 @@ const timeline = [
         icon: Sparkles,
     },
 ];
+
+const projects = [
+    {
+        title: "PCSO Lotto API",
+        description:
+            "A Node.js REST API that provides real-time PCSO lotto results via web scraping, with Redis-based caching and locking to ensure data freshness and prevent duplicate requests.",
+        link: "https://github.com/jiseeeh/pcso-lotto-api",
+        techStack: ["Node.js", "Cheerio", "Redis"],
+    },
+    {
+        title: "U Do Note",
+        description:
+            "Flutter note-taking app integrating Spaced Repetition, Leitner, Feynman techniques, and etc with OCR via Google ML Kit and AI summarization using OpenAI.",
+        link: "https://github.com/jiseeeh/u-do-note",
+        techStack: ["Flutter", "Firebase", "OpenAI"],
+    },
+];
 ---
 
 <main class="page flex flex-col space-y-10">
@@ -83,7 +99,7 @@ const timeline = [
         class="grid grid-cols-2 md:grid-cols-4 w-full border-l border-t border-border"
     >
         <DecorativeKanji title="2+" subTitle="Years of exp" kanji="歴" />
-        <DecorativeKanji title="3" subTitle="Projects Shipped" kanji="造" />
+        <DecorativeKanji title="1" subTitle="Projects Shipped" kanji="造" />
         <DecorativeKanji title="∞" subTitle="Coffees / day" kanji="杯" />
         <DecorativeKanji title="~2" subTitle="Posts / year" kanji="筆" />
     </section>
@@ -169,32 +185,16 @@ const timeline = [
     <Separator title="Projects" />
 
     <section class="flex flex-col gap-4">
-        <section class="w-full bg-secondary/30 border space-y-4 p-5">
-            <section class="flex">
-                <div>
-                    <span class="font-bold">Project Title</span>
-                    <p class="text-muted-foreground">
-                        A brief description of the project goes here. It should
-                        be concise and informative, giving readers a clear idea
-                        of what the project is about and its key features or
-                        goals.
-                    </p>
-                </div>
-                <a
-                    href="https://google.com"
-                    target="_blank"
-                    class="text-muted-foreground"
-                    rel="noreferrer"
-                >
-                    <ExternalLink size={20} />
-                </a>
-            </section>
-            <section class="flex flex-wrap gap-2">
-                <Badge content="Next.js" />
-                <Badge content="Drizzle" />
-                <Badge content="PostgreSQL" />
-            </section>
-        </section>
+        {
+            projects.map((project) => (
+                <ProjectCard
+                    title={project.title}
+                    description={project.description}
+                    url={project.link}
+                    techStack={project.techStack}
+                />
+            ))
+        }
     </section>
 
     <Separator title="Journey" />
