@@ -1,6 +1,6 @@
 ---
 import "../styles/global.css";
-import { Moon, Braces, Search, Rss } from "@lucide/astro";
+import { Moon, Sun, Braces, Search, Rss } from "@lucide/astro";
 import { ClientRouter } from "astro:transitions";
 
 const isOnCurrentPath = (path: string) => {
@@ -23,6 +23,26 @@ const isOnCurrentPath = (path: string) => {
             title="Serene Ink"
             href={new URL("feed.xml", Astro.url.origin)}
         />
+        <script is:inline>
+            const setDarkMode = () => {
+                const theme = (() => {
+                    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+                        return localStorage.getItem("theme");
+                    }
+                    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                        return "dark";
+                    }
+                    return "light";
+                })();
+                if (theme === "light") {
+                    document.documentElement.classList.remove("dark");
+                } else {
+                    document.documentElement.classList.add("dark");
+                }
+            };
+            setDarkMode();
+            document.addEventListener("astro:after-swap", setDarkMode);
+        </script>
     </head>
     <body class="max-w-page mx-auto">
         <nav class="px-5 lg:px-0 py-5 flex justify-between">
@@ -47,8 +67,9 @@ const isOnCurrentPath = (path: string) => {
                     >
                 </li>
                 <li>
-                    <button type="button" aria-label="Toggle dark mode">
-                        <Moon class="" size={16} />
+                    <button id="theme-toggle" type="button" aria-label="Toggle dark mode">
+                        <Moon class="block dark:hidden" size={16} />
+                        <Sun class="hidden dark:block" size={16} />
                     </button>
                 </li>
                 <li>
@@ -71,5 +92,20 @@ const isOnCurrentPath = (path: string) => {
         >
         </div>
         <script is:inline src="/scripts/cursor.js"></script>
+        <script>
+            document.addEventListener('astro:page-load', () => {
+                const themeToggle = document.getElementById('theme-toggle');
+                themeToggle?.addEventListener('click', () => {
+                    const isDark = document.documentElement.classList.contains('dark');
+                    if (isDark) {
+                        document.documentElement.classList.remove('dark');
+                        localStorage.setItem('theme', 'light');
+                    } else {
+                        document.documentElement.classList.add('dark');
+                        localStorage.setItem('theme', 'dark');
+                    }
+                });
+            });
+        </script>
     </body>
 </html>
