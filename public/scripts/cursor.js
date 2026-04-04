@@ -21,6 +21,7 @@ function updateCursor() {
 let onMouseMove = null;
 let onMouseOver = null;
 
+// cleanup
 document.addEventListener("astro:before-swap", () => {
   if (onMouseMove) {
     window.removeEventListener("mousemove", onMouseMove);
