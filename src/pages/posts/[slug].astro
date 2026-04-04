@@ -1,0 +1,187 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Badge from "@/components/ui/Badge.astro";
+
+export async function getStaticPaths() {
+    const posts = await getCollection("post");
+    return posts.map((post) => ({
+        params: { slug: post.id },
+        props: { post },
+    }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+
+const readTime = Math.max(1, Math.ceil(post.body!.split(/\s+/).length / 200));
+
+// date is assuming to be MM/DD/YYYY
+const dateParts = post.data.date.split("/");
+const dateFormatted = new Date(
+    Number(dateParts[2]),
+    Number(dateParts[0]) - 1,
+    Number(dateParts[1]),
+).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+});
+---
+
+<Layout>
+    <div class="fixed top-0 left-0 w-full z-50 bg-transparent">
+        <div
+            id="progress-bar"
+            class="h-0.75 bg-primary transition-all duration-150 ease-out"
+            style="width: 0%"
+        >
+        </div>
+    </div>
+    <main class="page pb-20 mt-10 relative">
+        <div class="mb-10 w-full">
+            <a
+                href="/"
+                class="text-sm font-medium text-muted-foreground hover:text-primary transition-colors flex items-center gap-2"
+            >
+                <span>←</span> Back to writing
+            </a>
+        </div>
+
+        <article class="w-full max-w-full">
+            <header class="mb-14 lg:mb-20">
+                <h1
+                    class="text-4xl md:text-5xl lg:text-5xl font-bold tracking-tight mb-6 text-foreground leading-tight"
+                >
+                    {post.data.title}
+                </h1>
+                <div
+                    class="flex items-center gap-2 text-sm text-muted-foreground mb-6 flex-wrap"
+                >
+                    <time>{dateFormatted}</time>
+                    <span>·</span>
+                    <span>{readTime} min read</span>
+                    <span>·</span>
+                    <div class="flex gap-2">
+                        {
+                            post.data.tags.map((tag: string) => (
+                                <Badge content={tag} />
+                            ))
+                        }
+                    </div>
+                </div>
+            </header>
+        </article>
+
+        <div class="flex flex-col lg:flex-row gap-10 relative">
+            <div class="flex-1 w-full max-w-full">
+                <div class="prose-blog">
+                    <div class="drop-cap">
+                        <Content />
+                    </div>
+                </div>
+            </div>
+
+            {
+                headings.length > 0 && (
+                    <aside class="hidden lg:block w-64 shrink-0">
+                        <div class="sticky top-20 border border-border rounded-md p-5 bg-card/30">
+                            <h3 class="text-xs uppercase tracking-widest font-semibold flex items-center gap-2 mb-4 text-primary">
+                                <span class="text-muted-foreground">#</span> //
+                                CONTENTS
+                            </h3>
+                            <ul class="flex flex-col gap-3 text-sm border-l border-border pl-0">
+                                {headings.map((heading: any) => (
+                                    <li class="relative">
+                                        <a
+                                            href={`#${heading.slug}`}
+                                            class="text-muted-foreground hover:text-foreground transition-colors block pl-4"
+                                        >
+                                            {heading.text}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </aside>
+                )
+            }
+        </div>
+
+        <div class="mt-20 pt-10 border-t border-border flex justify-start">
+            <a
+                href="/"
+                class="text-sm font-medium text-muted-foreground hover:text-primary transition-colors flex items-center gap-2"
+            >
+                <span>←</span> Back to writing
+            </a>
+        </div>
+    </main>
+
+    <script is:inline>
+        document.addEventListener("astro:page-load", () => {
+            const onScroll = () => {
+                const winScroll =
+                    document.body.scrollTop ||
+                    document.documentElement.scrollTop;
+                const height =
+                    document.documentElement.scrollHeight -
+                    document.documentElement.clientHeight;
+                const scrolled = height <= 0 ? 100 : (winScroll / height) * 100;
+                const progressBar = document.getElementById("progress-bar");
+                if (progressBar) {
+                    progressBar.style.width = scrolled + "%";
+                }
+            };
+
+            window.addEventListener("scroll", onScroll);
+
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        const id = entry.target.getAttribute("id");
+                        const link = document.querySelector(
+                            `aside a[href="#${id}"]`,
+                        );
+                        if (!link) return;
+
+                        const li = link.parentElement;
+                        if (entry.intersectionRatio > 0) {
+                            document
+                                .querySelectorAll("aside li")
+                                .forEach((el) => {
+                                    el.classList.remove(
+                                        "border-l-2",
+                                        "border-primary",
+                                        "-ml-[1px]",
+                                    );
+                                    const a = el.querySelector("a");
+                                    if (a)
+                                        a.classList.remove(
+                                            "text-foreground",
+                                            "font-medium",
+                                        );
+                                });
+
+                            li.classList.add(
+                                "border-l-2",
+                                "border-primary",
+                                "-ml-[1px]",
+                            );
+                            link.classList.add(
+                                "text-foreground",
+                                "font-medium",
+                            );
+                            link.classList.remove("text-muted-foreground");
+                        }
+                    });
+                },
+                { rootMargin: "0px 0px -80% 0px" },
+            );
+
+            document.querySelectorAll("h2, h3, h4").forEach((header) => {
+                observer.observe(header);
+            });
+        });
+    </script>
+</Layout>
