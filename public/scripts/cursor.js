@@ -18,6 +18,20 @@ function updateCursor() {
   requestAnimationFrame(updateCursor);
 }
 
+let onMouseMove = null;
+let onMouseOver = null;
+
+document.addEventListener("astro:before-swap", () => {
+  if (onMouseMove) {
+    window.removeEventListener("mousemove", onMouseMove);
+    onMouseMove = null;
+  }
+  if (onMouseOver) {
+    document.removeEventListener("mouseover", onMouseOver);
+    onMouseOver = null;
+  }
+});
+
 document.addEventListener("astro:page-load", () => {
   const isDesktop = matchMedia("(pointer: fine)").matches;
   if (!isDesktop) return;
@@ -30,18 +44,21 @@ document.addEventListener("astro:page-load", () => {
     updateCursor();
     isLoopRunning = true;
   }
-});
 
-window.addEventListener("mousemove", (e) => {
-  targetX = e.clientX - HALF_OF_CURSOR;
-  targetY = e.clientY - HALF_OF_CURSOR;
-  if (cursor) cursor.style.opacity = "1";
-});
+  onMouseMove = (e) => {
+    targetX = e.clientX - HALF_OF_CURSOR;
+    targetY = e.clientY - HALF_OF_CURSOR;
+    if (cursor) cursor.style.opacity = "1";
+  };
 
-document.addEventListener("mouseover", (e) => {
-  if (e.target instanceof Element && e.target.closest("a, button")) {
-    scale = 1.8;
-  } else {
-    scale = 1;
-  }
+  onMouseOver = (e) => {
+    if (e.target instanceof Element && e.target.closest("a, button")) {
+      scale = 1.8;
+    } else {
+      scale = 1;
+    }
+  };
+
+  window.addEventListener("mousemove", onMouseMove);
+  document.addEventListener("mouseover", onMouseOver);
 });
