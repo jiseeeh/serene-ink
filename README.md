@@ -1,46 +1,67 @@
-# Astro Starter Kit: Basics
+# Serene Ink
 
-```sh
-pnpm create astro@latest -- --template basics
+Serene Ink is a minimalist, elegant, and blazing-fast Astro blog template designed for developers, writers, and creators. It features a clean UI, dark/light mode toggle, and MDX support out of the box, ensuring you can focus entirely on your writing.
+
+## 🚀 Features
+
+- **Astro & MDX:** Write content efficiently with full Markdown/MDX component support.
+- **Tailwind CSS v4:** Modern styling with seamless customization.
+- **RSS Feed:** Built-in RSS feed generation out of the box.
+- **Responsive & Accessible:** Beautifully crafted for both mobile and desktop experiences.
+
+## 🧞 Setting Up
+
+1. **Clone the repository** (or use the template):
+   ```sh
+   git clone https://github.com/your-username/serene-ink.git my-blog
+   cd my-blog
+   ```
+
+2. **Install dependencies**:
+   ```sh
+   pnpm install
+   ```
+
+3. **Start the local development server**:
+   ```sh
+   pnpm dev
+   ```
+   Open `localhost:4321` in your browser.
+
+## ✍️ Personalization
+
+To make this template your own, you'll need to update a few files:
+
+1. **Site Title:** Go to `src/layouts/Layout.astro` and find the `<title>` and `rss` title to update `"Serene Ink"` to your own site name.
+2. **Author Profile & Projects:** Open `src/components/Author.astro` to:
+   - Change the `timeline` steps
+   - Add your own `projects`
+   - Update the "Currently Playing/Watching/Reading/Listening" in the `ActivityCard` sections
+   - Rewrite the hero introductory texts describing yourself
+3. **Favicon:** Replace `/public/favicon.svg` and `/public/favicon.ico` with your brand's icon.
+
+## 📝 Adding New Blogs
+
+All content lives in the `src/posts/` folder.
+To create a new blog post, simply create a new `.mdx` file (e.g., `my-new-post.mdx`).
+
+You must include the following frontmatter at the top of the file:
+
+```mdx
+---
+title: "Your Awesome Catchy Title"
+date: "2024-03-12"
+frontmatter: "A short description or summary of your post."
+tags: ["astro", "learning", "random"]
+---
+
+Your content goes here...
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 🌐 Deployment
 
-## 🚀 Project Structure
+- TODO
 
-Inside of your Astro project, you'll see the following folders and files:
+## 📜 License
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+This project is open-source and released under the [MIT License](LICENSE). Feel free to use it for personal or commercial projects.
