@@ -103,17 +103,20 @@ const dateFormatted = new Date(
         let onScroll = null;
         let observer = null;
 
-        // cleanup
-        document.addEventListener("astro:before-swap", () => {
-            if (onScroll) {
-                window.removeEventListener("scroll", onScroll);
-                onScroll = null;
-            }
-            if (observer) {
-                observer.disconnect();
-                observer = null;
-            }
-        });
+        document.addEventListener(
+            "astro:before-swap",
+            () => {
+                if (onScroll) {
+                    window.removeEventListener("scroll", onScroll);
+                    onScroll = null;
+                }
+                if (observer) {
+                    observer.disconnect();
+                    observer = null;
+                }
+            },
+            { once: true },
+        );
 
         document.addEventListener("astro:page-load", () => {
             onScroll = () => {

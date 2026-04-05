@@ -52,13 +52,16 @@ const { headings } = Astro.props;
 <script is:inline>
   let onDocumentClick = null;
 
-  // cleanup
-  document.addEventListener("astro:before-swap", () => {
-    if (onDocumentClick) {
-      document.removeEventListener("click", onDocumentClick);
-      onDocumentClick = null;
-    }
-  });
+  document.addEventListener(
+    "astro:before-swap",
+    () => {
+      if (onDocumentClick) {
+        document.removeEventListener("click", onDocumentClick);
+        onDocumentClick = null;
+      }
+    },
+    { once: true },
+  );
 
   document.addEventListener("astro:page-load", () => {
     const fabButton = document.getElementById("mobile-toc-fab");
