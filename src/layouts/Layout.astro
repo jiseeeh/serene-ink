@@ -103,9 +103,24 @@ const isOnCurrentPath = (path: string) => {
         </div>
         <script is:inline src="/scripts/cursor.js"></script>
         <script>
+            let onThemeToggleClick: ((e: MouseEvent) => void) | null = null;
+
+            document.addEventListener("astro:before-swap", () => {
+                const themeToggle = document.getElementById("theme-toggle");
+                if (onThemeToggleClick && themeToggle) {
+                    themeToggle.removeEventListener(
+                        "click",
+                        onThemeToggleClick,
+                    );
+                    onThemeToggleClick = null;
+                }
+            });
+
             document.addEventListener("astro:page-load", () => {
                 const themeToggle = document.getElementById("theme-toggle");
-                themeToggle?.addEventListener("click", (event) => {
+                if (!themeToggle) return;
+
+                onThemeToggleClick = (event: MouseEvent) => {
                     const isDark =
                         document.documentElement.classList.contains("dark");
 
@@ -165,7 +180,9 @@ const isOnCurrentPath = (path: string) => {
                             "theme-transition",
                         );
                     });
-                });
+                };
+
+                themeToggle.addEventListener("click", onThemeToggleClick);
             });
         </script>
     </body>
