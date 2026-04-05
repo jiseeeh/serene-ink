@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
     --background: hsl(48, 33%, 98%);
     --foreground: hsl(0, 0%, 10%);
@@ -109,6 +111,19 @@
     html.has-custom-cursor a {
         cursor: none;
     }
+}
+
+.theme-transition::view-transition-group(root),
+.theme-transition::view-transition-old(root),
+.theme-transition::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+}
+.theme-transition::view-transition-old(root) {
+    z-index: 1;
+}
+.theme-transition::view-transition-new(root) {
+    z-index: 2;
 }
 
 @layer base {

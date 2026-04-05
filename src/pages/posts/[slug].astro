@@ -2,6 +2,8 @@
 import { getCollection, render } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Badge from "@/components/ui/Badge.astro";
+import MobileTOC from "@/components/posts/MobileTOC.astro";
+import DesktopTOC from "@/components/posts/DesktopTOC.astro";
 
 export async function getStaticPaths() {
     const posts = await getCollection("post");
@@ -82,30 +84,7 @@ const dateFormatted = new Date(
                 </div>
             </div>
 
-            {
-                headings.length > 0 && (
-                    <aside class="hidden lg:block w-64 shrink-0">
-                        <div class="sticky top-20 border border-border rounded-md p-5 bg-card/30">
-                            <h3 class="text-xs uppercase tracking-widest font-semibold flex items-center gap-2 mb-4 text-primary">
-                                <span class="text-muted-foreground">#</span> //
-                                CONTENTS
-                            </h3>
-                            <ul class="flex flex-col gap-3 text-sm border-l border-border pl-0">
-                                {headings.map((heading: any) => (
-                                    <li class="relative">
-                                        <a
-                                            href={`#${heading.slug}`}
-                                            class="text-muted-foreground hover:text-foreground transition-colors block pl-4"
-                                        >
-                                            {heading.text}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </aside>
-                )
-            }
+            {headings.length > 0 && <DesktopTOC headings={headings} />}
         </div>
 
         <div class="mt-20 pt-10 border-t border-border flex justify-start">
@@ -118,9 +97,29 @@ const dateFormatted = new Date(
         </div>
     </main>
 
+    {headings.length > 0 && <MobileTOC headings={headings} />}
+
     <script is:inline>
+        let onScroll = null;
+        let observer = null;
+
+        document.addEventListener(
+            "astro:before-swap",
+            () => {
+                if (onScroll) {
+                    window.removeEventListener("scroll", onScroll);
+                    onScroll = null;
+                }
+                if (observer) {
+                    observer.disconnect();
+                    observer = null;
+                }
+            },
+            { once: true },
+        );
+
         document.addEventListener("astro:page-load", () => {
-            const onScroll = () => {
+            onScroll = () => {
                 const winScroll =
                     document.body.scrollTop ||
                     document.documentElement.scrollTop;
@@ -136,43 +135,64 @@ const dateFormatted = new Date(
 
             window.addEventListener("scroll", onScroll);
 
-            const observer = new IntersectionObserver(
+            const activeLiClasses = [
+                "border-l-2",
+                "border-primary",
+                "-ml-[1px]",
+            ];
+            const activeLinkClasses = ["text-foreground", "font-medium"];
+
+            observer = new IntersectionObserver(
                 (entries) => {
                     entries.forEach((entry) => {
                         const id = entry.target.getAttribute("id");
-                        const link = document.querySelector(
+                        const desktopLink = document.querySelector(
                             `aside a[href="#${id}"]`,
                         );
-                        if (!link) return;
+                        const mobileLink = document.querySelector(
+                            `#mobile-toc-menu a[href="#${id}"]`,
+                        );
 
-                        const li = link.parentElement;
                         if (entry.intersectionRatio > 0) {
-                            document
-                                .querySelectorAll("aside li")
-                                .forEach((el) => {
-                                    el.classList.remove(
-                                        "border-l-2",
-                                        "border-primary",
-                                        "-ml-[1px]",
-                                    );
-                                    const a = el.querySelector("a");
-                                    if (a)
-                                        a.classList.remove(
-                                            "text-foreground",
-                                            "font-medium",
-                                        );
-                                });
+                            if (desktopLink) {
+                                document
+                                    .querySelectorAll("aside li")
+                                    .forEach((el) => {
+                                        el.classList.remove(...activeLiClasses);
+                                        const a = el.querySelector("a");
+                                        if (a)
+                                            a.classList.remove(
+                                                ...activeLinkClasses,
+                                            );
+                                    });
 
-                            li.classList.add(
-                                "border-l-2",
-                                "border-primary",
-                                "-ml-[1px]",
-                            );
-                            link.classList.add(
-                                "text-foreground",
-                                "font-medium",
-                            );
-                            link.classList.remove("text-muted-foreground");
+                                const asideLi = desktopLink.parentElement;
+                                asideLi.classList.add(...activeLiClasses);
+                                desktopLink.classList.add(...activeLinkClasses);
+                                desktopLink.classList.remove(
+                                    "text-muted-foreground",
+                                );
+                            }
+
+                            if (mobileLink) {
+                                document
+                                    .querySelectorAll("#mobile-toc-menu li")
+                                    .forEach((el) => {
+                                        el.classList.remove(...activeLiClasses);
+                                        const a = el.querySelector("a");
+                                        if (a)
+                                            a.classList.remove(
+                                                ...activeLinkClasses,
+                                            );
+                                    });
+
+                                const mobileLi = mobileLink.parentElement;
+                                mobileLi.classList.add(...activeLiClasses);
+                                mobileLink.classList.add(...activeLinkClasses);
+                                mobileLink.classList.remove(
+                                    "text-muted-foreground",
+                                );
+                            }
                         }
                     });
                 },
