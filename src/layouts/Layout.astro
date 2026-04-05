@@ -26,10 +26,16 @@ const isOnCurrentPath = (path: string) => {
         <script is:inline>
             const setDarkMode = () => {
                 const theme = (() => {
-                    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+                    if (
+                        typeof localStorage !== "undefined" &&
+                        localStorage.getItem("theme")
+                    ) {
                         return localStorage.getItem("theme");
                     }
-                    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                    if (
+                        window.matchMedia("(prefers-color-scheme: dark)")
+                            .matches
+                    ) {
                         return "dark";
                     }
                     return "light";
@@ -67,7 +73,11 @@ const isOnCurrentPath = (path: string) => {
                     >
                 </li>
                 <li>
-                    <button id="theme-toggle" type="button" aria-label="Toggle dark mode">
+                    <button
+                        id="theme-toggle"
+                        type="button"
+                        aria-label="Toggle dark mode"
+                    >
                         <Moon class="block dark:hidden" size={16} />
                         <Sun class="hidden dark:block" size={16} />
                     </button>
@@ -93,17 +103,68 @@ const isOnCurrentPath = (path: string) => {
         </div>
         <script is:inline src="/scripts/cursor.js"></script>
         <script>
-            document.addEventListener('astro:page-load', () => {
-                const themeToggle = document.getElementById('theme-toggle');
-                themeToggle?.addEventListener('click', () => {
-                    const isDark = document.documentElement.classList.contains('dark');
-                    if (isDark) {
-                        document.documentElement.classList.remove('dark');
-                        localStorage.setItem('theme', 'light');
-                    } else {
-                        document.documentElement.classList.add('dark');
-                        localStorage.setItem('theme', 'dark');
+            document.addEventListener("astro:page-load", () => {
+                const themeToggle = document.getElementById("theme-toggle");
+                themeToggle?.addEventListener("click", (event) => {
+                    const isDark =
+                        document.documentElement.classList.contains("dark");
+
+                    const toggleTheme = () => {
+                        if (isDark) {
+                            document.documentElement.classList.remove("dark");
+                            localStorage.setItem("theme", "light");
+                        } else {
+                            document.documentElement.classList.add("dark");
+                            localStorage.setItem("theme", "dark");
+                        }
+                    };
+
+                    if (!document.startViewTransition) {
+                        toggleTheme();
+                        return;
                     }
+
+                    const x = event.clientX;
+                    const y = event.clientY;
+                    // compute radius required to cover the entire viewport
+                    // finds distance from click point to the farthest corner;
+                    // hypot for calculating straight line distance
+                    const endRadius = Math.hypot(
+                        Math.max(x, innerWidth - x), // furthest horiz dist
+                        Math.max(y, innerHeight - y), // furthest vert dist
+                    );
+
+                    document.documentElement.classList.add("theme-transition");
+
+                    const transition = document.startViewTransition(() => {
+                        toggleTheme();
+                    });
+
+                    transition.ready.then(() => {
+                        const clipPath = [
+                            `circle(0px at ${x}px ${y}px)`,
+                            `circle(${endRadius}px at ${x}px ${y}px)`,
+                        ];
+
+                        document.documentElement.animate(
+                            {
+                                clipPath: clipPath,
+                            },
+                            {
+                                duration: 500,
+                                easing: "ease-in-out",
+                                // targets the "new" snapshot layer created by the transition
+                                pseudoElement: "::view-transition-new(root)",
+                            },
+                        );
+                    });
+
+                    // cleanup
+                    transition.finished.finally(() => {
+                        document.documentElement.classList.remove(
+                            "theme-transition",
+                        );
+                    });
                 });
             });
         </script>
