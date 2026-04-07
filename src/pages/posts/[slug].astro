@@ -21,21 +21,22 @@ const readTime = Math.max(1, Math.ceil(post.body!.split(/\s+/).length / 200));
 
 // date is assuming to be MM/DD/YYYY
 const dateParts = post.data.date.split("/");
-const dateFormatted = new Date(
-    Number(dateParts[2]),
-    Number(dateParts[0]) - 1,
-    Number(dateParts[1]),
-).toLocaleDateString("en-US", {
+const dateObj = new Date(
+    Date.UTC(
+        Number(dateParts[2]),
+        Number(dateParts[0]) - 1,
+        Number(dateParts[1])
+    )
+);
+
+const dateFormatted = dateObj.toLocaleDateString("en-US", {
+    timeZone: "UTC",
     month: "short",
     day: "numeric",
     year: "numeric",
 });
 
-const isoDate = new Date(
-    Number(dateParts[2]),
-    Number(dateParts[0]) - 1,
-    Number(dateParts[1]),
-).toISOString();
+const isoDate = dateObj.toISOString();
 
 const ogImage = post.data.image?.src;
 ---
