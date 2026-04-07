@@ -3,6 +3,25 @@ import "../styles/global.css";
 import { Moon, Sun, Braces, Search, Rss } from "@lucide/astro";
 import { ClientRouter } from "astro:transitions";
 
+interface Props {
+    title?: string;
+    description?: string;
+    type?: string;
+    image?: string;
+}
+
+const {
+    title = "Serene Ink",
+    description = "Notes from someone still figuring it out — shipped anyway.",
+    type = "website",
+    image,
+} = Astro.props;
+
+const canonicalURL = new URL(
+    Astro.url.pathname,
+    Astro.site || Astro.url.origin,
+);
+
 const isOnCurrentPath = (path: string) => {
     return Astro.url.pathname === path;
 };
@@ -12,11 +31,23 @@ const isOnCurrentPath = (path: string) => {
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
+        <meta name="description" content={description} />
         <ClientRouter />
+        <link rel="sitemap" href="/sitemap-index.xml" />
+        <link rel="canonical" href={canonicalURL.href} />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" href="/favicon.ico" />
+
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonicalURL.href} />
+        <meta property="og:type" content={type} />
+        {image && <meta property="og:image" content={new URL(image, Astro.site || Astro.url.origin).href} />}
+        {image && <meta name="twitter:image" content={new URL(image, Astro.site || Astro.url.origin).href} />}
+        <meta name="twitter:card" content="summary_large_image" />
+
         <meta name="generator" content={Astro.generator} />
-        <title>Serene Ink</title>
+        <title>{title}</title>
         <link
             rel="alternate"
             type="application/rss+xml"

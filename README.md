@@ -32,13 +32,15 @@ Serene Ink is a minimalist, elegant, and blazing-fast Astro blog template design
 
 To make this template your own, you'll need to update a few files:
 
-1. **Site Title:** Go to `src/layouts/Layout.astro` and find the `<title>` and `rss` title to update `"Serene Ink"` to your own site name.
-2. **Author Profile & Projects:** Open `src/components/Author.astro` to:
+1. **Domain config:** Open `astro.config.mjs` and update `site` to match your intended production URL (this controls your sitemaps and SEO).
+2. **Site Properties:** Go to `src/layouts/Layout.astro` and locate the `Props` interface to update your default site `title` and `description` for meta tags. You should also update the `title` and `description` in `src/pages/feed.xml.js` for your RSS feed.
+3. **Author Profile & Projects:** Open `src/components/Author.astro` to:
    - Change the `timeline` steps
    - Add your own `projects`
    - Update the "Currently Playing/Watching/Reading/Listening" in the `ActivityCard` sections
    - Rewrite the hero introductory texts describing yourself
-3. **Favicon:** Replace `/public/favicon.svg` and `/public/favicon.ico` with your brand's icon.
+4. **Structured Data:** Open `src/pages/posts/[slug].astro` and update the author's name in the `application/ld+json` script (around line 115) to your own name for better SEO.
+5. **Favicon:** Replace `/public/favicon.svg` and `/public/favicon.ico` with your brand's icon.
 
 ## 📝 Adding New Blogs
 
