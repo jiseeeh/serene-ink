@@ -4,6 +4,7 @@ import Layout from "@/layouts/Layout.astro";
 import Badge from "@/components/ui/Badge.astro";
 import MobileTOC from "@/components/posts/MobileTOC.astro";
 import DesktopTOC from "@/components/posts/DesktopTOC.astro";
+import { Image } from "astro:assets";
 
 export async function getStaticPaths() {
     const posts = await getCollection("post");
@@ -20,18 +21,32 @@ const readTime = Math.max(1, Math.ceil(post.body!.split(/\s+/).length / 200));
 
 // date is assuming to be MM/DD/YYYY
 const dateParts = post.data.date.split("/");
-const dateFormatted = new Date(
-    Number(dateParts[2]),
-    Number(dateParts[0]) - 1,
-    Number(dateParts[1]),
-).toLocaleDateString("en-US", {
+const dateObj = new Date(
+    Date.UTC(
+        Number(dateParts[2]),
+        Number(dateParts[0]) - 1,
+        Number(dateParts[1])
+    )
+);
+
+const dateFormatted = dateObj.toLocaleDateString("en-US", {
+    timeZone: "UTC",
     month: "short",
     day: "numeric",
     year: "numeric",
 });
+
+const isoDate = dateObj.toISOString();
+
+const ogImage = post.data.image?.src;
 ---
 
-<Layout>
+<Layout
+    title={`${post.data.title} | Serene Ink`}
+    description={post.data.frontmatter}
+    type="article"
+    image={ogImage}
+>
     <div class="fixed top-0 left-0 w-full z-50 bg-transparent">
         <div
             id="progress-bar"
@@ -60,7 +75,7 @@ const dateFormatted = new Date(
                 <div
                     class="flex items-center gap-2 text-sm text-muted-foreground mb-6 flex-wrap"
                 >
-                    <time>{dateFormatted}</time>
+                    <time datetime={isoDate}>{dateFormatted}</time>
                     <span>·</span>
                     <span>{readTime} min read</span>
                     <span>·</span>
@@ -72,6 +87,13 @@ const dateFormatted = new Date(
                         }
                     </div>
                 </div>
+                {post.data.image && (
+                    <Image 
+                        src={post.data.image} 
+                        alt={post.data.title} 
+                        class="w-full h-auto rounded-xl mt-8 object-cover aspect-video border border-border"
+                    />
+                )}
             </header>
         </article>
 
@@ -98,6 +120,25 @@ const dateFormatted = new Date(
     </main>
 
     {headings.length > 0 && <MobileTOC headings={headings} />}
+    <script
+        is:inline
+        type="application/ld+json"
+        set:html={JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: post.data.title,
+            image: ogImage ? new URL(ogImage, Astro.site || Astro.url.origin).href : undefined,
+            author: {
+                "@type": "Person",
+                name: "Jiseeeh",
+            },
+            datePublished: isoDate,
+            description: post.data.frontmatter,
+            url: Astro.site
+                ? new URL(Astro.url.pathname, Astro.site).href
+                : Astro.url.href,
+        })}
+    />
 
     <script is:inline>
         let onScroll = null;
