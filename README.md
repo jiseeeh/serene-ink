@@ -45,16 +45,21 @@ To make this template your own, you'll need to update a few files:
 ## 📝 Adding New Blogs
 
 All content lives in the `src/posts/` folder.
-To create a new blog post, simply create a new `.mdx` file (e.g., `my-new-post.mdx`).
+To create a new blog post, you can use the built-in command:
 
-You must include the following frontmatter at the top of the file:
+```sh
+pnpm run new-post "Your Awesome Catchy Title"
+```
+
+Alternatively, simply create a new `.mdx` file (e.g., `my-new-post.mdx`) and ensure you include the following frontmatter at the top of the file:
 
 ```mdx
 ---
 title: "Your Awesome Catchy Title"
-date: "2024-03-12"
+date: "03/12/2024"
 frontmatter: "A short description or summary of your post."
 tags: ["astro", "learning", "random"]
+image: ""
 ---
 
 Your content goes here...
