@@ -3,12 +3,14 @@ import { getCollection } from "astro:content";
 import Badge from "./ui/Badge.astro";
 
 const entries = await getCollection("post");
-const posts = entries.map((entry) => ({
-    id: entry.id,
-    slug: entry.id,
-    readTime: Math.max(1, Math.ceil(entry.body!.split(/\s+/).length / 200)),
-    ...entry.data,
-}));
+const posts = entries
+    .map((entry) => ({
+        id: entry.id,
+        slug: entry.id,
+        readTime: Math.max(1, Math.ceil(entry.body!.split(/\s+/).length / 200)),
+        ...entry.data,
+    }))
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 type MappedPost = (typeof posts)[number];
 
@@ -48,7 +50,9 @@ const grouped = posts.reduce(
 
     <section class="mt-20 my-5">
         {
-            Object.keys(grouped).map((year) => (
+            Object.keys(grouped)
+                .sort((a, b) => Number(b) - Number(a))
+                .map((year) => (
                 <section>
                     <h2 class="text-2xl">{year}</h2>
                     {Object.entries(grouped[year]).map(([month, posts]) => (
