@@ -126,13 +126,18 @@ const isOnCurrentPath = (path: string) => {
                         id="theme-toggle"
                         type="button"
                         aria-label="Toggle dark mode"
+                        class="flex items-center"
                     >
                         <Moon class="block dark:hidden" size={16} />
                         <Sun class="hidden dark:block" size={16} />
                     </button>
                 </li>
                 <li>
-                    <a href="/feed.xml" aria-label="RSS feed">
+                    <a
+                        href="/feed.xml"
+                        aria-label="RSS feed"
+                        class="flex items-center"
+                    >
                         <Rss size={16} />
                     </a>
                 </li>
@@ -141,6 +146,7 @@ const isOnCurrentPath = (path: string) => {
                         id="search-toggle"
                         type="button"
                         aria-label="Open search"
+                        class="flex items-center"
                     >
                         <Search size={16} />
                     </button>
