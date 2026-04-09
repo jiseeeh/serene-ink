@@ -15,7 +15,9 @@ export default defineConfig({
 
   integrations: [
     expressiveCode({
-      themes: ["github-dark", "github-light"],
+      themes: ["github-light", "github-dark"],
+      useDarkModeMediaQuery: false,
+      themeCssSelector: (theme) => (theme.name.includes("dark") ? ".dark" : ":root"),
     }),
     mdx(),
     sitemap()
