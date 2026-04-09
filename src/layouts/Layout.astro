@@ -119,22 +119,42 @@ const isOnCurrentPath = (path: string) => {
                     </a>
                 </li>
                 <li>
-                    <button type="button" aria-label="Open search">
+                    <button id="search-toggle" type="button" aria-label="Open search">
                         <Search size={16} />
                     </button>
                 </li>
             </ul>
         </nav>
         <slot />
+        <div id="search-overlay" class="fixed inset-0 z-[100] bg-background/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-start justify-center pt-20 sm:pt-32 px-4 disable-select" aria-hidden="true">
+            <div id="search-modal" class="bg-card w-full max-w-xl rounded-xl border border-border shadow-2xl scale-95 transition-transform duration-300 flex flex-col overflow-hidden max-h-[80vh]">
+                <div class="flex items-center px-4 py-3 border-b border-border gap-3">
+                    <Search class="text-muted-foreground" size={18} />
+                    <input type="text" id="search-input" class="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground" placeholder="Search posts... (Cmd+K)" autocomplete="off" />
+                    <button id="search-close" class="text-xs text-muted-foreground bg-secondary px-2 py-1 rounded hidden sm:block cursor-pointer">ESC</button>
+                </div>
+                <div id="search-results" class="overflow-y-auto p-2 flex flex-col gap-1 hidden"></div>
+                <div id="search-empty" class="py-14 text-center text-sm text-muted-foreground hidden">No results found.</div>
+                <div id="search-initial" class="py-10 text-center text-sm text-muted-foreground">Type to start searching.</div>
+            </div>
+        </div>
         <div
             id="cursor"
             class="bg-primary mix-blend-hard-light opacity-0 size-3 rounded-full pointer-events-none z-9999 fixed top-0 left-0"
             transition:persist
         >
         </div>
-        <script is:inline src="/scripts/cursor.js"></script>
+        <script src="../scripts/cursor.ts"></script>
         <script>
+            import type { SearchItem } from "../types";
+
             let onThemeToggleClick: ((e: MouseEvent) => void) | null = null;
+            let onSearchToggleClick: ((e: MouseEvent) => void) | null = null;
+            let onSearchCloseClick: ((e: MouseEvent) => void) | null = null;
+            let onSearchOverlayClick: ((e: MouseEvent) => void) | null = null;
+            let onSearchKeydown: ((e: KeyboardEvent) => void) | null = null;
+            let onSearchInputRaw: ((e: Event) => void) | null = null;
+            let searchData: SearchItem[] | null = null;
 
             document.addEventListener("astro:before-swap", () => {
                 const themeToggle = document.getElementById("theme-toggle");
@@ -145,6 +165,23 @@ const isOnCurrentPath = (path: string) => {
                     );
                     onThemeToggleClick = null;
                 }
+
+                const searchToggle = document.getElementById("search-toggle");
+                const searchClose = document.getElementById("search-close");
+                const searchOverlay = document.getElementById("search-overlay");
+                const searchInput = document.getElementById("search-input");
+
+                if (onSearchToggleClick && searchToggle) searchToggle.removeEventListener("click", onSearchToggleClick);
+                if (onSearchCloseClick && searchClose) searchClose.removeEventListener("click", onSearchCloseClick);
+                if (onSearchOverlayClick && searchOverlay) searchOverlay.removeEventListener("click", onSearchOverlayClick);
+                if (onSearchInputRaw && searchInput) searchInput.removeEventListener("input", onSearchInputRaw);
+                if (onSearchKeydown) document.removeEventListener("keydown", onSearchKeydown);
+
+                onSearchToggleClick = null;
+                onSearchCloseClick = null;
+                onSearchOverlayClick = null;
+                onSearchInputRaw = null;
+                onSearchKeydown = null;
             });
 
             document.addEventListener("astro:page-load", () => {
@@ -214,6 +251,104 @@ const isOnCurrentPath = (path: string) => {
                 };
 
                 themeToggle.addEventListener("click", onThemeToggleClick);
+
+                const searchToggle = document.getElementById("search-toggle");
+                const searchClose = document.getElementById("search-close");
+                const searchOverlay = document.getElementById("search-overlay");
+                const searchModal = document.getElementById("search-modal");
+                const searchInput = document.getElementById("search-input") as HTMLInputElement;
+                const resultsContainer = document.getElementById("search-results");
+                const emptyState = document.getElementById("search-empty");
+                const initialState = document.getElementById("search-initial");
+
+                const openSearch = async () => {
+                    if (!searchOverlay || !searchModal || !searchInput) return;
+                    searchOverlay.classList.remove("opacity-0", "pointer-events-none");
+                    searchOverlay.classList.add("opacity-100");
+                    searchModal.classList.remove("scale-95");
+                    searchModal.classList.add("scale-100");
+                    document.body.style.overflow = "hidden";
+                    setTimeout(() => searchInput.focus(), 50);
+
+                    if (!searchData) {
+                        try {
+                            const res = await fetch("/search.json");
+                            searchData = await res.json();
+                        } catch (e) {
+                            console.error("Failed to load search index", e);
+                        }
+                    }
+                };
+
+                const closeSearch = () => {
+                    if (!searchOverlay || !searchModal) return;
+                    searchOverlay.classList.add("opacity-0", "pointer-events-none");
+                    searchOverlay.classList.remove("opacity-100");
+                    searchModal.classList.add("scale-95");
+                    searchModal.classList.remove("scale-100");
+                    document.body.style.overflow = "";
+                };
+
+                const renderResults = (query: string) => {
+                    if (!resultsContainer || !emptyState || !initialState) return;
+                    if (!query.trim()) {
+                        resultsContainer.classList.add("hidden");
+                        emptyState.classList.add("hidden");
+                        initialState.classList.remove("hidden");
+                        return;
+                    }
+                    initialState.classList.add("hidden");
+                    if (!searchData) return;
+
+                    const q = query.toLowerCase();
+                    const filtered = searchData.filter((post: SearchItem) => 
+                        post.title.toLowerCase().includes(q) ||
+                        post.frontmatter.toLowerCase().includes(q) ||
+                        post.tags.some((tag: string) => tag.toLowerCase().includes(q))
+                    );
+
+                    if (filtered.length === 0) {
+                        resultsContainer.classList.add("hidden");
+                        emptyState.classList.remove("hidden");
+                    } else {
+                        emptyState.classList.add("hidden");
+                        resultsContainer.classList.remove("hidden");
+                        
+                        resultsContainer.innerHTML = filtered.map((post: SearchItem) => `
+                            <a href="${post.link}" class="flex flex-col gap-1 p-3 rounded-lg hover:bg-secondary transition-colors group">
+                                <div class="flex justify-between items-center bg-transparent">
+                                    <span class="text-foreground font-medium group-hover:text-primary transition-colors line-clamp-1">${post.title}</span>
+                                    <span class="text-xs text-muted-foreground whitespace-nowrap ml-4">${post.date}</span>
+                                </div>
+                                <span class="text-sm text-muted-foreground line-clamp-1">${post.frontmatter}</span>
+                            </a>
+                        `).join("");
+                    }
+                };
+
+                onSearchToggleClick = () => openSearch();
+                onSearchCloseClick = () => closeSearch();
+                onSearchOverlayClick = (e: MouseEvent) => {
+                    if (e.target === searchOverlay) closeSearch();
+                };
+                onSearchInputRaw = (e: Event) => {
+                    const target = e.target as HTMLInputElement;
+                    renderResults(target.value);
+                };
+                onSearchKeydown = (e: KeyboardEvent) => {
+                    if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+                        e.preventDefault();
+                        openSearch();
+                    } else if (e.key === "Escape") {
+                        closeSearch();
+                    }
+                };
+
+                if (searchToggle) searchToggle.addEventListener("click", onSearchToggleClick);
+                if (searchClose) searchClose.addEventListener("click", onSearchCloseClick);
+                if (searchOverlay) searchOverlay.addEventListener("click", onSearchOverlayClick);
+                if (searchInput) searchInput.addEventListener("input", onSearchInputRaw);
+                document.addEventListener("keydown", onSearchKeydown);
             });
         </script>
     </body>
