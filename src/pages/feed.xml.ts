@@ -1,12 +1,14 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
+import type { APIContext } from 'astro';
 
-function parseDate(dateStr) {
+
+function parseDate(dateStr: string) {
   const [m, d, y] = dateStr.split('/');
   return new Date(Number(y), Number(m) - 1, Number(d));
 }
 
-export async function GET(context) {
+export async function GET(context: APIContext) {
   const entries = await getCollection('post');
 
   return rss({

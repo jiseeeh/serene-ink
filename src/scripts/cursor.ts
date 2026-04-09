@@ -1,4 +1,4 @@
-let cursor;
+let cursor: HTMLElement | null = null;
 let targetX = 0,
   targetY = 0;
 let currentX = 0,
@@ -18,8 +18,8 @@ function updateCursor() {
   requestAnimationFrame(updateCursor);
 }
 
-let onMouseMove = null;
-let onMouseOver = null;
+let onMouseMove: ((e: MouseEvent) => void) | null = null;
+let onMouseOver: ((e: MouseEvent) => void) | null = null;
 
 // cleanup
 document.addEventListener("astro:before-swap", () => {

@@ -10,7 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "new-post": "node scripts/new-post.js"
+    "new-post": "node --experimental-strip-types scripts/new-post.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.3",
