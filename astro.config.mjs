@@ -6,9 +6,13 @@ import sitemap from "@astrojs/sitemap";
 import { defineConfig } from "astro/config";
 import expressiveCode from "astro-expressive-code";
 
+import cloudflare from "@astrojs/cloudflare";
+
 // https://astro.build/config
 export default defineConfig({
-  site: "https://example.com", // TODO
+  // TODO
+  site: "https://example.com",
+
   vite: {
     plugins: [tailwindcss()],
   },
@@ -22,4 +26,6 @@ export default defineConfig({
     mdx(),
     sitemap()
   ],
+
+  adapter: cloudflare(),
 });
