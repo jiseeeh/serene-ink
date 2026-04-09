@@ -6,6 +6,7 @@ Serene Ink is a minimalist, elegant, and blazing-fast Astro blog template design
 
 - **Astro & MDX:** Write content efficiently with full Markdown/MDX component support.
 - **Tailwind CSS v4:** Modern styling with seamless customization.
+- **Performance First:** 100/100 Lighthouse scores with minimal shipping JavaScript.
 - **RSS Feed:** Built-in RSS feed generation out of the box.
 - **Responsive & Accessible:** Beautifully crafted for both mobile and desktop experiences.
 
