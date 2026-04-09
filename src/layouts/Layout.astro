@@ -42,8 +42,26 @@ const isOnCurrentPath = (path: string) => {
         <meta property="og:description" content={description} />
         <meta property="og:url" content={canonicalURL.href} />
         <meta property="og:type" content={type} />
-        {image && <meta property="og:image" content={new URL(image, Astro.site || Astro.url.origin).href} />}
-        {image && <meta name="twitter:image" content={new URL(image, Astro.site || Astro.url.origin).href} />}
+        {
+            image && (
+                <meta
+                    property="og:image"
+                    content={
+                        new URL(image, Astro.site || Astro.url.origin).href
+                    }
+                />
+            )
+        }
+        {
+            image && (
+                <meta
+                    name="twitter:image"
+                    content={
+                        new URL(image, Astro.site || Astro.url.origin).href
+                    }
+                />
+            )
+        }
         <meta name="twitter:card" content="summary_large_image" />
 
         <meta name="generator" content={Astro.generator} />
@@ -82,7 +100,7 @@ const isOnCurrentPath = (path: string) => {
         </script>
     </head>
     <body class="max-w-page mx-auto">
-        <nav class="px-5 lg:px-0 py-5 flex justify-between">
+        <nav class="px-5 py-5 flex justify-between">
             <Braces />
 
             <ul class="flex items-center gap-4">
@@ -119,23 +137,60 @@ const isOnCurrentPath = (path: string) => {
                     </a>
                 </li>
                 <li>
-                    <button id="search-toggle" type="button" aria-label="Open search">
+                    <button
+                        id="search-toggle"
+                        type="button"
+                        aria-label="Open search"
+                    >
                         <Search size={16} />
                     </button>
                 </li>
             </ul>
         </nav>
         <slot />
-        <div id="search-overlay" class="fixed inset-0 z-[100] bg-background/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-start justify-center pt-20 sm:pt-32 px-4 disable-select" aria-hidden="true">
-            <div id="search-modal" class="bg-card w-full max-w-xl rounded-xl border border-border shadow-2xl scale-95 transition-transform duration-300 flex flex-col overflow-hidden max-h-[80vh]">
-                <div class="flex items-center px-4 py-3 border-b border-border gap-3">
+        <div
+            id="search-overlay"
+            class="fixed inset-0 z-[100] bg-background/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-start justify-center pt-20 sm:pt-32 px-4 disable-select"
+            aria-hidden="true"
+        >
+            <div
+                id="search-modal"
+                class="bg-card w-full max-w-xl rounded-xl border border-border shadow-2xl scale-95 transition-transform duration-300 flex flex-col overflow-hidden max-h-[80vh]"
+            >
+                <div
+                    class="flex items-center px-4 py-3 border-b border-border gap-3"
+                >
                     <Search class="text-muted-foreground" size={18} />
-                    <input type="text" id="search-input" class="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground" placeholder="Search posts... (Cmd+K)" autocomplete="off" />
-                    <button id="search-close" class="text-xs text-muted-foreground bg-secondary px-2 py-1 rounded hidden sm:block cursor-pointer">ESC</button>
+                    <input
+                        type="text"
+                        id="search-input"
+                        class="flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground"
+                        placeholder="Search posts... (Cmd+K)"
+                        autocomplete="off"
+                    />
+                    <button
+                        id="search-close"
+                        class="text-xs text-muted-foreground bg-secondary px-2 py-1 rounded hidden sm:block cursor-pointer"
+                        >ESC</button
+                    >
                 </div>
-                <div id="search-results" class="overflow-y-auto p-2 flex flex-col gap-1 hidden"></div>
-                <div id="search-empty" class="py-14 text-center text-sm text-muted-foreground hidden">No results found.</div>
-                <div id="search-initial" class="py-10 text-center text-sm text-muted-foreground">Type to start searching.</div>
+                <div
+                    id="search-results"
+                    class="overflow-y-auto p-2 flex flex-col gap-1 hidden"
+                >
+                </div>
+                <div
+                    id="search-empty"
+                    class="py-14 text-center text-sm text-muted-foreground hidden"
+                >
+                    No results found.
+                </div>
+                <div
+                    id="search-initial"
+                    class="py-10 text-center text-sm text-muted-foreground"
+                >
+                    Type to start searching.
+                </div>
             </div>
         </div>
         <div
@@ -171,11 +226,25 @@ const isOnCurrentPath = (path: string) => {
                 const searchOverlay = document.getElementById("search-overlay");
                 const searchInput = document.getElementById("search-input");
 
-                if (onSearchToggleClick && searchToggle) searchToggle.removeEventListener("click", onSearchToggleClick);
-                if (onSearchCloseClick && searchClose) searchClose.removeEventListener("click", onSearchCloseClick);
-                if (onSearchOverlayClick && searchOverlay) searchOverlay.removeEventListener("click", onSearchOverlayClick);
-                if (onSearchInputRaw && searchInput) searchInput.removeEventListener("input", onSearchInputRaw);
-                if (onSearchKeydown) document.removeEventListener("keydown", onSearchKeydown);
+                if (onSearchToggleClick && searchToggle)
+                    searchToggle.removeEventListener(
+                        "click",
+                        onSearchToggleClick,
+                    );
+                if (onSearchCloseClick && searchClose)
+                    searchClose.removeEventListener(
+                        "click",
+                        onSearchCloseClick,
+                    );
+                if (onSearchOverlayClick && searchOverlay)
+                    searchOverlay.removeEventListener(
+                        "click",
+                        onSearchOverlayClick,
+                    );
+                if (onSearchInputRaw && searchInput)
+                    searchInput.removeEventListener("input", onSearchInputRaw);
+                if (onSearchKeydown)
+                    document.removeEventListener("keydown", onSearchKeydown);
 
                 onSearchToggleClick = null;
                 onSearchCloseClick = null;
@@ -256,14 +325,20 @@ const isOnCurrentPath = (path: string) => {
                 const searchClose = document.getElementById("search-close");
                 const searchOverlay = document.getElementById("search-overlay");
                 const searchModal = document.getElementById("search-modal");
-                const searchInput = document.getElementById("search-input") as HTMLInputElement;
-                const resultsContainer = document.getElementById("search-results");
+                const searchInput = document.getElementById(
+                    "search-input",
+                ) as HTMLInputElement;
+                const resultsContainer =
+                    document.getElementById("search-results");
                 const emptyState = document.getElementById("search-empty");
                 const initialState = document.getElementById("search-initial");
 
                 const openSearch = async () => {
                     if (!searchOverlay || !searchModal || !searchInput) return;
-                    searchOverlay.classList.remove("opacity-0", "pointer-events-none");
+                    searchOverlay.classList.remove(
+                        "opacity-0",
+                        "pointer-events-none",
+                    );
                     searchOverlay.classList.add("opacity-100");
                     searchModal.classList.remove("scale-95");
                     searchModal.classList.add("scale-100");
@@ -282,7 +357,10 @@ const isOnCurrentPath = (path: string) => {
 
                 const closeSearch = () => {
                     if (!searchOverlay || !searchModal) return;
-                    searchOverlay.classList.add("opacity-0", "pointer-events-none");
+                    searchOverlay.classList.add(
+                        "opacity-0",
+                        "pointer-events-none",
+                    );
                     searchOverlay.classList.remove("opacity-100");
                     searchModal.classList.add("scale-95");
                     searchModal.classList.remove("scale-100");
@@ -290,7 +368,8 @@ const isOnCurrentPath = (path: string) => {
                 };
 
                 const renderResults = (query: string) => {
-                    if (!resultsContainer || !emptyState || !initialState) return;
+                    if (!resultsContainer || !emptyState || !initialState)
+                        return;
                     if (!query.trim()) {
                         resultsContainer.classList.add("hidden");
                         emptyState.classList.add("hidden");
@@ -301,10 +380,13 @@ const isOnCurrentPath = (path: string) => {
                     if (!searchData) return;
 
                     const q = query.toLowerCase();
-                    const filtered = searchData.filter((post: SearchItem) => 
-                        post.title.toLowerCase().includes(q) ||
-                        post.frontmatter.toLowerCase().includes(q) ||
-                        post.tags.some((tag: string) => tag.toLowerCase().includes(q))
+                    const filtered = searchData.filter(
+                        (post: SearchItem) =>
+                            post.title.toLowerCase().includes(q) ||
+                            post.frontmatter.toLowerCase().includes(q) ||
+                            post.tags.some((tag: string) =>
+                                tag.toLowerCase().includes(q),
+                            ),
                     );
 
                     if (filtered.length === 0) {
@@ -313,8 +395,10 @@ const isOnCurrentPath = (path: string) => {
                     } else {
                         emptyState.classList.add("hidden");
                         resultsContainer.classList.remove("hidden");
-                        
-                        resultsContainer.innerHTML = filtered.map((post: SearchItem) => `
+
+                        resultsContainer.innerHTML = filtered
+                            .map(
+                                (post: SearchItem) => `
                             <a href="${post.link}" class="flex flex-col gap-1 p-3 rounded-lg hover:bg-secondary transition-colors group">
                                 <div class="flex justify-between items-center bg-transparent">
                                     <span class="text-foreground font-medium group-hover:text-primary transition-colors line-clamp-1">${post.title}</span>
@@ -322,7 +406,9 @@ const isOnCurrentPath = (path: string) => {
                                 </div>
                                 <span class="text-sm text-muted-foreground line-clamp-1">${post.frontmatter}</span>
                             </a>
-                        `).join("");
+                        `,
+                            )
+                            .join("");
                     }
                 };
 
@@ -344,10 +430,17 @@ const isOnCurrentPath = (path: string) => {
                     }
                 };
 
-                if (searchToggle) searchToggle.addEventListener("click", onSearchToggleClick);
-                if (searchClose) searchClose.addEventListener("click", onSearchCloseClick);
-                if (searchOverlay) searchOverlay.addEventListener("click", onSearchOverlayClick);
-                if (searchInput) searchInput.addEventListener("input", onSearchInputRaw);
+                if (searchToggle)
+                    searchToggle.addEventListener("click", onSearchToggleClick);
+                if (searchClose)
+                    searchClose.addEventListener("click", onSearchCloseClick);
+                if (searchOverlay)
+                    searchOverlay.addEventListener(
+                        "click",
+                        onSearchOverlayClick,
+                    );
+                if (searchInput)
+                    searchInput.addEventListener("input", onSearchInputRaw);
                 document.addEventListener("keydown", onSearchKeydown);
             });
         </script>
