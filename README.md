@@ -32,8 +32,10 @@ Serene Ink is a minimalist, elegant, and blazing-fast Astro blog template design
 
 To make this template your own, you'll need to update a few files:
 
-1. **Domain config:** Open `astro.config.mjs` and update `site` to match your intended production URL (this controls your sitemaps and SEO).
-2. **Site Properties:** Go to `src/layouts/Layout.astro` and locate the `Astro.props` destructuring assignment (below the `Props` interface) to update your default site `title` and `description` for meta tags. You should also update the `title` and `description` in `src/pages/feed.xml.js` for your RSS feed.
+1. **Domain config:** Open `astro.config.mjs` and update `site` to match your intended production URL. This is crucial for fixing Sitemaps, SEO, and ensuring absolute URLs for social sharing graphic cards (Open Graph/Twitter/Discord) work correctly when deployed.
+2. **Site Properties:** Go to `src/layouts/Layout.astro` and locate the `Astro.props` destructuring assignment (below the `Props` interface) to update your default site `title` and `description` for meta tags.
+   - *Note on Meta Images:* Make sure your `home.webp` or custom social sharing images remain in the `public/` folder so social platforms evaluate their paths successfully.
+   - You should also update the `title` and `description` in `src/pages/feed.xml.ts` for your RSS feed.
 3. **Author Profile & Projects:** Open `src/components/Author.astro` to:
    - Change the `timeline` steps
    - Add your own `projects`
@@ -67,7 +69,19 @@ Your content goes here...
 
 ## 🌐 Deployment
 
-- TODO
+This template is configured natively as a static site, making it seamlessly compatible with static hosting services like **Cloudflare Pages**.
+
+**Deploying to Cloudflare Pages:**
+1. Push your template code to a GitHub or GitLab repository.
+2. Log in to your Cloudflare dashboard and navigate to **Workers & Pages** -> **Create application** -> **Pages** -> **Connect to Git**.
+3. Select your repository and proceed to setup.
+4. Configure the build settings:
+   - **Framework preset:** Astro
+   - **Build command:** `pnpm run build`
+   - **Build output directory:** `dist`
+5. Click **Save and Deploy**.
+
+*(Don't forget to update your `site` URL in `astro.config.mjs` once Cloudflare provides you with your `[project-name].pages.dev` link!)*
 
 ## 📜 License
 
