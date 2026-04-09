@@ -160,6 +160,7 @@ const isOnCurrentPath = (path: string) => {
             id="search-overlay"
             class="fixed inset-0 z-[100] bg-background/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-start justify-center pt-20 sm:pt-32 px-4 disable-select"
             aria-hidden="true"
+            inert
         >
             <div
                 id="search-modal"
@@ -343,6 +344,8 @@ const isOnCurrentPath = (path: string) => {
 
                 const openSearch = async () => {
                     if (!searchOverlay || !searchModal || !searchInput) return;
+                    searchOverlay.removeAttribute("inert");
+                    searchOverlay.setAttribute("aria-hidden", "false");
                     searchOverlay.classList.remove(
                         "opacity-0",
                         "pointer-events-none",
@@ -365,6 +368,8 @@ const isOnCurrentPath = (path: string) => {
 
                 const closeSearch = () => {
                     if (!searchOverlay || !searchModal) return;
+                    searchOverlay.setAttribute("inert", "");
+                    searchOverlay.setAttribute("aria-hidden", "true");
                     searchOverlay.classList.add(
                         "opacity-0",
                         "pointer-events-none",
