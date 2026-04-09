@@ -8,7 +8,7 @@ import expressiveCode from "astro-expressive-code";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://example.com", // TODO
+  site: "https://serene-ink.pages.dev/",
   vite: {
     plugins: [tailwindcss()],
   },
