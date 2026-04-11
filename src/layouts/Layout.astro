@@ -22,8 +22,10 @@ const canonicalURL = new URL(
     Astro.site || Astro.url.origin,
 );
 
+const normalize = (p: string) => p.replace(/\/+$/, "") || "/";
+
 const isOnCurrentPath = (path: string) => {
-    return Astro.url.pathname === path;
+    return normalize(Astro.url.pathname) === normalize(path);
 };
 ---
 
