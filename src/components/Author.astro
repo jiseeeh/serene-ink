@@ -1,4 +1,5 @@
 ---
+import { getCollection } from "astro:content";
 import {
     Terminal,
     GitMerge,
@@ -87,6 +88,20 @@ const projects = [
         techStack: ["Flutter", "Firebase", "OpenAI"],
     },
 ];
+
+const entries = await getCollection("post");
+
+let postsPerYear = 0;
+if (entries.length > 0) {
+    const years = entries.map((entry) => {
+        const [, , y] = entry.data.date.split("/");
+        return Number(y);
+    });
+    const minYear = Math.min(...years);
+    const maxYear = Math.max(...years);
+    const activeYears = Math.max(1, maxYear - minYear + 1);
+    postsPerYear = Math.ceil(entries.length / activeYears);
+}
 ---
 
 <main class="page flex flex-col space-y-10">
@@ -108,9 +123,17 @@ const projects = [
         class="grid grid-cols-2 md:grid-cols-4 w-full border-l border-t border-border"
     >
         <DecorativeKanji title="2+" subTitle="Years of exp" kanji="歴" />
-        <DecorativeKanji title="1" subTitle="Projects Shipped" kanji="造" />
+        <DecorativeKanji
+            title={projects.length.toString()}
+            subTitle="Projects Shipped"
+            kanji="造"
+        />
         <DecorativeKanji title="∞" subTitle="Coffees / day" kanji="杯" />
-        <DecorativeKanji title="~2" subTitle="Posts / year" kanji="筆" />
+        <DecorativeKanji
+            title={`~${postsPerYear}`}
+            subTitle="Posts / year"
+            kanji="筆"
+        />
     </section>
 
     <div class="w-full h-1 bg-foreground"></div>
