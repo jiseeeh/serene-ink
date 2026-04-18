@@ -10,6 +10,8 @@ const post = defineCollection({
     frontmatter: z.string(),
     tags: z.array(z.string()),
     image: image().optional(),
+    draft: z.boolean().optional().default(false),
+    updatedDate: z.string().optional(),
   }),
 });
 

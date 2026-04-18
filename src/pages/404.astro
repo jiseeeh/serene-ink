@@ -7,6 +7,7 @@ import weirdFrieren from "../assets/images/weird-frieren.webp";
 
 const entries = await getCollection("post");
 const posts = entries
+    .filter((entry) => !entry.data.draft)
     .map((entry) => ({
         id: entry.id,
         slug: entry.id,
