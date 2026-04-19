@@ -40,6 +40,7 @@ const formattedDate = `${month}/${day}/${year}`;
 const content = `---
 title: "${title}"
 date: "${formattedDate}"
+updatedDate: ""
 frontmatter: "Write a short summary here..."
 tags: ["general"]
 draft: false
