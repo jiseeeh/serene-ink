@@ -2,6 +2,9 @@
 import "../styles/global.css";
 import { Moon, Sun, Braces, Search, Rss } from "@lucide/astro";
 import { ClientRouter } from "astro:transitions";
+import { siteConfig } from "@/config";
+import Footer from "@/components/Footer.astro";
+import BackToTop from "@/components/BackToTop.astro";
 
 interface Props {
     title?: string;
@@ -11,8 +14,8 @@ interface Props {
 }
 
 const {
-    title = "Serene Ink",
-    description = "Notes from someone still figuring it out — shipped anyway.",
+    title = siteConfig.title,
+    description = siteConfig.description,
     type = "website",
     image,
 } = Astro.props;
@@ -25,7 +28,11 @@ const canonicalURL = new URL(
 const normalize = (p: string) => p.replace(/\/+$/, "") || "/";
 
 const isOnCurrentPath = (path: string) => {
-    return normalize(Astro.url.pathname) === normalize(path);
+    const currentPath = normalize(Astro.url.pathname);
+    // treat paginated listing pages as part of the home route so the
+    // home navigation item remains active on `/page/...` archive pages.
+    if (path === "/" && currentPath.startsWith("/page/")) return true;
+    return currentPath === normalize(path);
 };
 ---
 
@@ -73,9 +80,20 @@ const isOnCurrentPath = (path: string) => {
         <link
             rel="alternate"
             type="application/rss+xml"
-            title="Serene Ink"
+            title={siteConfig.rss.title}
             href={new URL("feed.xml", Astro.url.origin)}
         />
+        {
+            siteConfig.analytics.umami.websiteId &&
+                siteConfig.analytics.umami.src && (
+                    <script
+                        is:inline
+                        defer
+                        src={siteConfig.analytics.umami.src}
+                        data-website-id={siteConfig.analytics.umami.websiteId}
+                    />
+                )
+        }
         <script is:inline>
             const setDarkMode = () => {
                 const theme = (() => {
@@ -103,28 +121,36 @@ const isOnCurrentPath = (path: string) => {
             document.addEventListener("astro:after-swap", setDarkMode);
         </script>
     </head>
-    <body class="max-w-page mx-auto">
-        <nav class="px-5 py-5 flex justify-between">
+    <body class="max-w-page mx-auto min-h-screen flex flex-col">
+        <nav
+            id="main-nav"
+            class="px-5 py-5 flex justify-between sticky top-0 z-50"
+        >
             <Braces />
 
             <ul class="flex items-center gap-4">
-                <li>
-                    <a href="/" class={isOnCurrentPath("/") ? "active" : ""}
-                        ><span class={isOnCurrentPath("/") ? "" : "nav-link"}
-                            >Writing</span
-                        ></a
-                    >
-                </li>
-                <li>
-                    <a
-                        href="/about"
-                        class={isOnCurrentPath("/about") ? "active" : ""}
-                        ><span
-                            class={isOnCurrentPath("/about") ? "" : "nav-link"}
-                            >About</span
-                        ></a
-                    >
-                </li>
+                {
+                    siteConfig.nav.map((link) => (
+                        <li>
+                            <a
+                                href={link.href}
+                                class={
+                                    isOnCurrentPath(link.href) ? "active" : ""
+                                }
+                            >
+                                <span
+                                    class={
+                                        isOnCurrentPath(link.href)
+                                            ? ""
+                                            : "nav-link"
+                                    }
+                                >
+                                    {link.label}
+                                </span>
+                            </a>
+                        </li>
+                    ))
+                }
                 <li>
                     <button
                         id="theme-toggle"
@@ -157,7 +183,11 @@ const isOnCurrentPath = (path: string) => {
                 </li>
             </ul>
         </nav>
-        <slot />
+        <div class="flex-1">
+            <slot />
+        </div>
+        <Footer />
+        <BackToTop />
         <div
             id="search-overlay"
             class="fixed inset-0 z-[100] bg-background/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-start justify-center pt-20 sm:pt-32 px-4 disable-select"
@@ -222,6 +252,9 @@ const isOnCurrentPath = (path: string) => {
             let onSearchInputRaw: ((e: Event) => void) | null = null;
             let searchData: SearchItem[] | null = null;
 
+            let onNavScroll: (() => void) | null = null;
+            let lastScrollY = 0;
+
             document.addEventListener("astro:before-swap", () => {
                 const themeToggle = document.getElementById("theme-toggle");
                 if (onThemeToggleClick && themeToggle) {
@@ -262,6 +295,11 @@ const isOnCurrentPath = (path: string) => {
                 onSearchOverlayClick = null;
                 onSearchInputRaw = null;
                 onSearchKeydown = null;
+
+                if (onNavScroll) {
+                    window.removeEventListener("scroll", onNavScroll);
+                    onNavScroll = null;
+                }
             });
 
             document.addEventListener("astro:page-load", () => {
@@ -417,7 +455,7 @@ const isOnCurrentPath = (path: string) => {
                             <a href="${post.link}" class="flex flex-col gap-1 p-3 rounded-lg hover:bg-secondary transition-colors group">
                                 <div class="flex justify-between items-center bg-transparent">
                                     <span class="text-foreground font-medium group-hover:text-primary transition-colors line-clamp-1">${post.title}</span>
-                                    <span class="text-xs text-muted-foreground whitespace-nowrap ml-4">${post.date}</span>
+                                    <span class="text-xs text-muted-foreground whitespace-nowrap ml-4">${post.readTime} min · ${post.date}</span>
                                 </div>
                                 <span class="text-sm text-muted-foreground line-clamp-1">${post.frontmatter}</span>
                             </a>
@@ -457,6 +495,32 @@ const isOnCurrentPath = (path: string) => {
                 if (searchInput)
                     searchInput.addEventListener("input", onSearchInputRaw);
                 document.addEventListener("keydown", onSearchKeydown);
+
+                // scroll-aware navbar
+                const nav = document.getElementById("main-nav");
+                if (nav) {
+                    lastScrollY = window.scrollY;
+
+                    onNavScroll = () => {
+                        const currentY = window.scrollY;
+
+                        if (currentY > 100) {
+                            nav.classList.add("nav-scrolled");
+                        } else {
+                            nav.classList.remove("nav-scrolled");
+                        }
+
+                        if (currentY > lastScrollY && currentY > 200) {
+                            nav.classList.add("nav-hidden");
+                        } else {
+                            nav.classList.remove("nav-hidden");
+                        }
+
+                        lastScrollY = currentY;
+                    };
+
+                    window.addEventListener("scroll", onNavScroll);
+                }
             });
         </script>
     </body>

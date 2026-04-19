@@ -1,26 +1,23 @@
-import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
-import type { APIContext } from 'astro';
-
-
-function parseDate(dateStr: string) {
-  const [m, d, y] = dateStr.split('/');
-  return new Date(Number(y), Number(m) - 1, Number(d));
-}
+import rss from "@astrojs/rss";
+import { getCollection } from "astro:content";
+import type { APIContext } from "astro";
+import { siteConfig } from "../config";
+import { parseDate } from "../utils/date";
 
 export async function GET(context: APIContext) {
-  const entries = await getCollection('post');
+    const entries = await getCollection("post");
+    const posts = entries.filter((e) => !e.data.draft);
 
-  return rss({
-    title: "Jiseeeh's Blog",
-    description: 'Notes from someone still figuring it out — shipped anyway.',
-    site: context.url.origin,
-    items: entries.map((entry) => ({
-      title: entry.data.title,
-      pubDate: parseDate(entry.data.date),
-      description: entry.data.frontmatter,
-      link: `/posts/${entry.id}`,
-    })),
-    customData: `<language>en-us</language>`,
-  });
+    return rss({
+        title: siteConfig.rss.title,
+        description: siteConfig.rss.description,
+        site: context.url.origin,
+        items: posts.map((entry) => ({
+            title: entry.data.title,
+            pubDate: parseDate(entry.data.date),
+            description: entry.data.frontmatter,
+            link: `/posts/${entry.id}`,
+        })),
+        customData: `<language>en-us</language>`,
+    });
 }
