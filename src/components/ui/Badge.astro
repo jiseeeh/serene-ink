@@ -1,11 +1,23 @@
 ---
 interface Props {
     content: string;
+    href?: string;
 }
 
-const { content } = Astro.props;
+const { content, href } = Astro.props;
 ---
 
-<span class="text-sm text-muted-foreground rounded-full bg-muted px-3 py-1">
-    {content}
-</span>
+{
+    href ? (
+        <a
+            href={href}
+            class="text-sm text-muted-foreground rounded-full bg-muted px-3 py-1 hover:bg-primary/10 hover:text-primary transition-colors"
+        >
+            {content}
+        </a>
+    ) : (
+        <span class="text-sm text-muted-foreground rounded-full bg-muted px-3 py-1">
+            {content}
+        </span>
+    )
+}
