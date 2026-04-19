@@ -4,6 +4,7 @@ import Badge from "../components/ui/Badge.astro";
 import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import weirdFrieren from "../assets/images/weird-frieren.webp";
+import { calcReadTime } from "../utils/reading-time";
 
 const entries = await getCollection("post");
 const posts = entries
@@ -11,10 +12,7 @@ const posts = entries
     .map((entry) => ({
         id: entry.id,
         slug: entry.id,
-        readTime: Math.max(
-            1,
-            Math.ceil(entry.body!.split(/\s+/).length / 200),
-        ),
+        readTime: calcReadTime(entry.body!),
         ...entry.data,
     }))
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
