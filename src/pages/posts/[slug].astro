@@ -159,6 +159,8 @@ const relatedPosts = allEntries
                             src={post.data.image}
                             alt={post.data.title}
                             class="w-full h-auto rounded-xl mt-8 object-cover aspect-video border border-border"
+                            loading="eager"
+                            fetchpriority="high"
                         />
                     )
                 }
