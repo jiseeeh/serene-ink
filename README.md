@@ -4,32 +4,11 @@ Serene Ink is a minimalist, elegant, and blazing-fast Astro blog template design
 
 ## 🚀 Features
 
-- **Astro & MDX:** Write content efficiently with full Markdown/MDX component support.
-- **Tailwind CSS v4:** Modern styling with seamless customization.
-- **Performance First:** 100/100 Lighthouse scores with minimal shipping JavaScript.
-- **Centralized Config:** Personalize the entire site from a single `src/config.ts` file.
-- **Dark/Light Mode:** Smooth theme toggle with a radial clip-path view transition animation.
-- **Tags & Categories:** Browse posts by tag with dedicated `/tags` and `/tags/[tag]` pages.
-- **Pagination:** Configurable posts-per-page with numbered pagination controls.
-- **Search:** Cmd+K search modal with instant client-side filtering.
-- **RSS Feed:** Built-in RSS feed generation out of the box.
-- **SEO Optimized:** Open Graph, Twitter Cards, canonical URLs, JSON-LD structured data, sitemap, and robots.txt.
-- **Draft Posts:** Mark posts as `draft: true` to hide them from listings, search, and RSS during development.
-- **Last Updated Date:** Optional `updatedDate` frontmatter field displayed alongside the publish date.
-- **Share Buttons:** Copy link, Twitter/X, and LinkedIn share buttons on every post.
-- **Prev/Next Navigation:** Navigate between adjacent posts at the bottom of each article.
-- **Related Posts:** Automatically suggests up to 3 related posts based on shared tags.
-- **Table of Contents:** Desktop sidebar and mobile FAB with active heading highlighting.
-- **Reading Progress:** Scroll progress bar on post pages and proportional read-time indicators on the listing.
-- **Scroll-Aware Navbar:** Sticky nav that auto-hides on scroll down and adds blur on scroll.
-- **Back to Top:** Fixed button that appears after scrolling, smooth scrolls to top.
-- **Page Transitions:** Subtle fade + slide animations between page navigations.
-- **Footer:** Site-wide footer with social links, copyright, and built-with credit.
-- **Analytics:** Configurable Umami analytics — just add your website ID and script URL.
-- **Responsive & Accessible:** Beautifully crafted for both mobile and desktop experiences.
-- **Custom Cursor:** Smooth LERP cursor on pointer-fine devices.
-- **Expressive Code:** Syntax highlighting with copy-to-clipboard, line highlighting, and file titles.
-- **MDX Components:** Callout, Tabs, Steps, ProsCons, Quote, YouTube, Figure, LinkCard, and more.
+- **Modern Stack:** Built with Astro, MDX, and Tailwind CSS v4 for ultimate developer experience and performance (100/100 Lighthouse scores).
+- **Rich Blogging:** Includes tags, pagination, related posts, draft support, expressive code snippets, and a variety of custom MDX components out of the box.
+- **Premium UX/UI:** Dark/light mode toggle with view transitions, Cmd+K search, smooth custom cursor, reading progress bar, and a dynamic Table of Contents.
+- **SEO & Analytics:** Fully configured with RSS, canonical URLs, Open Graph, sitemaps, structured data, and a ready-to-use Umami analytics integration.
+- **Centralized Config:** Easily personalize the entire site from a single `src/config.ts` file without digging into component code.
 
 ## 🧞 Setting Up
 
