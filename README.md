@@ -130,6 +130,18 @@ Your content goes here...
 | `updatedDate` | string | ❌ | Last updated date in `MM/DD/YYYY` format |
 | `image` | string | ❌ | Path to a cover image (relative to `src/assets/`) |
 
+### Organizing Posts
+
+You can organize your posts into subdirectories inside `src/posts/` (e.g., `src/posts/2024/tutorials/my-post.mdx`). Astro will automatically generate the corresponding URL structure (`/posts/2024/tutorials/my-post`).
+
+When nesting posts, use the `@/` alias to comfortably import out-of-the-box components without worrying about relative path depths:
+
+```mdx
+import Callout from '@/components/ui/Callout.astro';
+```
+
+*(Note that the `image` frontmatter property still requires relative paths like `../../../assets/images/cover.webp` when deeply nested.)*
+
 ## 📊 Analytics
 
 Serene Ink supports [Umami](https://umami.is/) analytics out of the box. To enable it:
