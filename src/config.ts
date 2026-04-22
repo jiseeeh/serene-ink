@@ -10,6 +10,7 @@ export const siteConfig: SiteConfig = {
     },
     nav: [
         { label: "Writing", href: "/" },
+        { label: "Tags", href: "/tags" },
         { label: "About", href: "/about" },
     ],
     socials: {
