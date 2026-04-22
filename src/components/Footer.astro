@@ -1,6 +1,6 @@
 ---
 import { siteConfig } from "@/config";
-import { Github, Twitter, Linkedin, Rss } from "@lucide/astro";
+import { Github, Twitter, Linkedin } from "@lucide/astro";
 ---
 
 <footer class="border-t border-border mt-20 py-10 px-10 lg:px-20">
@@ -63,10 +63,9 @@ import { Github, Twitter, Linkedin, Rss } from "@lucide/astro";
             }
             <a
                 href="/feed.xml"
-                aria-label="RSS feed"
-                class="text-muted-foreground hover:text-primary transition-colors"
+                class="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
-                <Rss size={18} />
+                Subscribe to RSS
             </a>
         </div>
     </div>
