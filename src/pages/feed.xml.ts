@@ -9,6 +9,7 @@ export async function GET(context: APIContext) {
     const posts = entries.filter((e) => !e.data.draft);
 
     return rss({
+        stylesheet: "/rss-styles.xsl",
         title: siteConfig.rss.title,
         description: siteConfig.rss.description,
         site: context.url.origin,
