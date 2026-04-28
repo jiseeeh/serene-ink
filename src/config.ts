@@ -15,8 +15,8 @@ export const siteConfig: SiteConfig = {
     ],
     socials: {
         github: "https://github.com/jiseeeh",
-        twitter: "",
-        linkedin: "",
+        twitter: "https://x.com/username",
+        linkedin: "https://ph.linkedin.com/in/name",
     },
     postsPerPage: 5,
     analytics: {
