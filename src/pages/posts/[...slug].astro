@@ -100,8 +100,8 @@ const relatedPosts = allEntries
     <div class="fixed top-0 left-0 w-full z-50 bg-transparent">
         <div
             id="progress-bar"
-            class="h-0.75 bg-primary transition-all duration-150 ease-out"
-            style="width: 0%"
+            class="h-0.75 w-full bg-primary origin-left"
+            style="transform: scaleX(0)"
         >
         </div>
     </div>
@@ -312,10 +312,10 @@ const relatedPosts = allEntries
                 const height =
                     document.documentElement.scrollHeight -
                     document.documentElement.clientHeight;
-                const scrolled = height <= 0 ? 100 : (winScroll / height) * 100;
+                const scrolled = height <= 0 ? 1 : winScroll / height;
                 const progressBar = document.getElementById("progress-bar");
                 if (progressBar) {
-                    progressBar.style.width = scrolled + "%";
+                    progressBar.style.transform = `scaleX(${scrolled})`;
                 }
             };
 

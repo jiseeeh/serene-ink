@@ -148,6 +148,17 @@
     animation: page-fade-in 180ms ease-in both;
 }
 
+@media (prefers-reduced-motion: reduce) {
+    *,
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
 /* scroll-aware navbar */
 #main-nav {
     background-color: var(--background);
@@ -179,6 +190,11 @@
 
     body {
         @apply bg-background text-foreground font-sans;
+    }
+    :focus-visible {
+        outline: 2px solid var(--ring);
+        outline-offset: 2px;
+        border-radius: 2px;
     }
     h1,
     h2,
@@ -273,7 +289,7 @@
     .prose-blog ol li {
         list-style-type: decimal;
     }
-    .drop-cap::first-letter {
+    .drop-cap > p:first-child::first-letter {
         font-size: 4.5rem;
         font-weight: 700;
         line-height: 0.8;

@@ -122,6 +122,12 @@ const isOnCurrentPath = (path: string) => {
         </script>
     </head>
     <body class="max-w-page mx-auto min-h-screen flex flex-col">
+        <a
+            href="#main-content"
+            class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-100 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground"
+        >
+            Skip to content
+        </a>
         <nav
             id="main-nav"
             class="px-5 py-5 flex justify-between sticky top-0 z-50"
@@ -193,7 +199,7 @@ const isOnCurrentPath = (path: string) => {
                 </li>
             </ul>
         </nav>
-        <div class="flex-1">
+        <div id="main-content" tabindex="-1" class="flex-1 outline-none">
             <slot />
         </div>
         <Footer />
